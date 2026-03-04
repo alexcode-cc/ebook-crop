@@ -1,0 +1,64 @@
+# 虛擬環境
+.venv/
+venv/
+env/
+.env/
+
+# Python 編譯與快取
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+wheels/
+*.manifest
+*.spec
+
+# 安裝與套件
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# 環境變數與機密
+.env
+.env.local
+.env.*.local
+*.pem
+
+# IDE 與編輯器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 作業系統
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 日誌與暫存
+*.log
+*.tmp
+*.temp
+.cache/
+
+# 測試與覆蓋率
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+
+# uv
+.uv/

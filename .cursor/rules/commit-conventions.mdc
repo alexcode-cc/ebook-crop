@@ -1,0 +1,49 @@
+---
+description: Git Commit 訊息規範（Angular 格式，繁體中文）
+alwaysApply: true
+---
+
+# Git Commit 規範
+
+執行 Git Commit 時，必須遵循以下規則：
+
+## 規範來源
+
+- [AngularJS Git Commit Message Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit)
+- 詳見專案 `CONTRIBUTING.md`
+
+## 格式
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+## 強制規則
+
+1. **語言**：所有提交訊息使用**繁體中文**
+2. **subject**：祈使句、現在式，首字不大寫，句尾無句點
+3. **每行**：不超過 100 字元
+
+## Type 對照
+
+| Type | 繁體中文用途 |
+|------|-------------|
+| feat | 新功能 |
+| fix | 錯誤修復 |
+| docs | 文件 |
+| style | 格式 |
+| refactor | 重構 |
+| test | 測試 |
+| chore | 建置/維護 |
+
+## 範例
+
+```
+feat(pdf): 新增 PDF 留白裁切功能
+chore: 初始化專案結構
+fix(cli): 修正輸出檔名錯誤
+```

@@ -1,0 +1,17 @@
+[project]
+name = "ebook-crop"
+version = "0.1.0"
+description = "裁切 PDF 留白區域，優化電子書閱讀版面"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pymupdf>=1.24.0",
+    "tomli>=2.0.0",
+]
+
+[project.scripts]
+ebook-crop = "ebook_crop.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
