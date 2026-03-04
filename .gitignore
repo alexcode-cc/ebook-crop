@@ -1,3 +1,7 @@
+# 輸入與輸出目錄
+input/
+output/
+
 # 虛擬環境
 .venv/
 venv/
