@@ -3,11 +3,34 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 from pathlib import Path
 
 import fitz  # PyMuPDF
 import tomli
+
+
+def _safe_print(msg: str) -> None:
+    """輸出至 stdout，遇編碼錯誤時改用 ASCII 替代字元"""
+    try:
+        print(msg)
+    except UnicodeEncodeError:
+        print(msg.encode("ascii", errors="replace").decode("ascii"))
+
+
+def save_config_to_output(config_path: Path, output_pdf_path: Path) -> None:
+    """
+    將使用的 config.toml 複製到輸出目錄，檔名為處理文件的檔名。
+
+    Args:
+        config_path: 設定檔路徑
+        output_pdf_path: 輸出 PDF 路徑（用於決定檔名與目錄）
+    """
+    output_dir = output_pdf_path.parent
+    config_copy_name = f"{output_pdf_path.stem}.toml"
+    config_copy_path = output_dir / config_copy_name
+    shutil.copy2(config_path, config_copy_path)
 
 
 def load_config(config_path: Path) -> dict:
@@ -155,8 +178,9 @@ def main() -> None:
         print(f"批次模式：從 {input_dir} 處理 {len(pdf_files)} 個檔案至 {output_dir}")
         for input_path in pdf_files:
             output_path = output_dir / input_path.name
-            print(f"裁切中：{input_path.name} -> {output_path}")
+            _safe_print(f"裁切中：{input_path.name} -> {output_path}")
             crop_pdf(input_path, output_path, margins, start_page, end_page)
+            save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
     else:
         # 單檔模式
@@ -175,8 +199,9 @@ def main() -> None:
         if output_path.suffix.lower() != ".pdf":
             output_path = output_path.with_suffix(".pdf")
 
-        print(f"裁切中：{args.input} -> {output_path}")
+        _safe_print(f"裁切中：{args.input} -> {output_path}")
         crop_pdf(args.input, output_path, margins, start_page, end_page)
+        save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
 
 

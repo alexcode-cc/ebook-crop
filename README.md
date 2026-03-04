@@ -64,7 +64,7 @@ end = 0      # 結束裁切頁數，0=裁切到最後一頁，-1=封底不裁切
 
 ### 批次模式（無參數）
 
-不指定輸入與輸出檔案時，自動處理 `input/` 目錄內所有 PDF，以相同檔名輸出至 `output/` 目錄：
+不指定輸入與輸出檔案時，自動處理 `input/` 目錄內所有 PDF，以相同檔名輸出至 `output/` 目錄。每個處理後的 PDF 會同時儲存對應的裁切設定檔（`檔名.toml`）於輸出目錄，便於日後追溯。
 
 ```bash
 # 將 PDF 放入 input/ 目錄後執行
@@ -95,7 +95,7 @@ ebook-crop -i my_input -d my_output
 ```
 ebook-crop/
 ├── input/             # 批次模式輸入目錄（Git 排除）
-├── output/            # 批次模式輸出目錄（Git 排除）
+├── output/            # 批次模式輸出目錄（含 PDF 與對應 .toml 設定檔，Git 排除）
 ├── config-sample.toml # 設定檔範本（複製為 config.toml 使用）
 ├── config.toml        # 本機設定（Git 排除）
 ├── pyproject.toml   # 專案與依賴設定
