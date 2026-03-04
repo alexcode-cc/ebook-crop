@@ -14,6 +14,9 @@ def load_config(config_path: Path) -> dict:
     """載入 config.toml 設定檔"""
     if not config_path.exists():
         print(f"錯誤：找不到設定檔 {config_path}", file=sys.stderr)
+        sample = config_path.parent / "config-sample.toml"
+        if sample.exists():
+            print(f"提示：可複製 {sample} 為 {config_path}", file=sys.stderr)
         sys.exit(1)
 
     with open(config_path, "rb") as f:
@@ -24,6 +27,8 @@ def crop_pdf(
     input_path: Path,
     output_path: Path,
     margins: dict[str, float],
+    start_page: int = 2,
+    end_page: int = 0,
 ) -> None:
     """
     裁切 PDF 留白區域。
@@ -32,6 +37,8 @@ def crop_pdf(
         input_path: 輸入 PDF 路徑
         output_path: 輸出 PDF 路徑
         margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
+        start_page: 開始裁切頁數（1-based），0=從第1頁，2=封面不裁切
+        end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
     """
     left = margins.get("left", 0)
     right = margins.get("right", 0)
@@ -41,13 +48,20 @@ def crop_pdf(
     doc = fitz.open(input_path)
     total_pages = len(doc)
 
+    # 1-based 轉 0-based：start_page=2 -> 從 index 1 開始裁切
+    start_index = (start_page - 1) if start_page > 0 else 0
+    # end_page=0 -> 裁切到最後；end_page=-1 -> 裁切到倒數第二頁
+    end_index = (total_pages - 2) if end_page == -1 else (total_pages - 1)
+
     for page_num in range(total_pages):
+        # 不在裁切範圍內的頁面跳過
+        if page_num < start_index or page_num > end_index:
+            continue
+
         page = doc[page_num]
         rect = page.rect
 
         # 計算裁切後的顯示區域
-        # 裁切左、上：起點往內移
-        # 裁切右、下：終點往內移
         crop_rect = fitz.Rect(
             left,
             top,
@@ -113,9 +127,14 @@ def main() -> None:
 
     config = load_config(args.config)
     margins = config.get("margins", {})
+    pages_config = config.get("pages", {})
+    start_page = int(pages_config.get("start", 2))
+    end_page = int(pages_config.get("end", 0))
 
     print(f"留白設定：左 {margins.get('left', 0)}pt, 右 {margins.get('right', 0)}pt, "
           f"上 {margins.get('top', 0)}pt, 下 {margins.get('bottom', 0)}pt")
+    print(f"頁數範圍：從第 {start_page} 頁開始，"
+          f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
 
     if args.input is None and args.output is None:
         # 批次模式：處理 input/ 目錄內所有 PDF
@@ -137,7 +156,7 @@ def main() -> None:
         for input_path in pdf_files:
             output_path = output_dir / input_path.name
             print(f"裁切中：{input_path.name} -> {output_path}")
-            crop_pdf(input_path, output_path, margins)
+            crop_pdf(input_path, output_path, margins, start_page, end_page)
         print("完成！")
     else:
         # 單檔模式
@@ -157,7 +176,7 @@ def main() -> None:
             output_path = output_path.with_suffix(".pdf")
 
         print(f"裁切中：{args.input} -> {output_path}")
-        crop_pdf(args.input, output_path, margins)
+        crop_pdf(args.input, output_path, margins, start_page, end_page)
         print("完成！")
 
 

@@ -39,7 +39,9 @@ uv pip install -e .
 
 ## 設定檔 config.toml
 
-在專案根目錄的 `config.toml` 中設定要裁切的留白大小（單位：點 points，1 英吋 = 72 點）：
+首次使用請複製 `config-sample.toml` 為 `config.toml` 後依需求修改。`config.toml` 已自 Git 排除，可存放本機專屬設定。
+
+留白單位：點 (points)，1 英吋 = 72 點
 
 ```toml
 [margins]
@@ -47,9 +49,13 @@ left = 36    # 左側裁切量（點）
 right = 36   # 右側裁切量（點）
 top = 36     # 上方裁切量（點）
 bottom = 36  # 下方裁切量（點）
+
+[pages]
+start = 2    # 開始裁切頁數（1-based），2=封面不裁切，0=封面也裁切
+end = 0      # 結束裁切頁數，0=裁切到最後一頁，-1=封底不裁切
 ```
 
-**單位換算參考：**
+**留白單位換算參考：**
 - 1 公分 ≈ 28.35 點
 - 1 英吋 = 72 點
 - 0.5 英吋 = 36 點
@@ -88,9 +94,10 @@ ebook-crop -i my_input -d my_output
 
 ```
 ebook-crop/
-├── input/           # 批次模式輸入目錄（Git 排除）
-├── output/          # 批次模式輸出目錄（Git 排除）
-├── config.toml      # 留白裁切設定
+├── input/             # 批次模式輸入目錄（Git 排除）
+├── output/            # 批次模式輸出目錄（Git 排除）
+├── config-sample.toml # 設定檔範本（複製為 config.toml 使用）
+├── config.toml        # 本機設定（Git 排除）
 ├── pyproject.toml   # 專案與依賴設定
 ├── README.md
 └── ebook_crop/

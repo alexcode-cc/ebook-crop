@@ -60,6 +60,7 @@ Desktop.ini
 *.tmp
 *.temp
 .cache/
+logs/
 
 # 測試與覆蓋率
 .coverage
