@@ -56,6 +56,17 @@ bottom = 36  # 下方裁切量（點）
 
 ## 使用方式
 
+### 批次模式（無參數）
+
+不指定輸入與輸出檔案時，自動處理 `input/` 目錄內所有 PDF，以相同檔名輸出至 `output/` 目錄：
+
+```bash
+# 將 PDF 放入 input/ 目錄後執行
+ebook-crop
+```
+
+### 單檔模式
+
 ```bash
 # 基本用法（輸出為 輸入檔名_cropped.pdf）
 ebook-crop input.pdf
@@ -67,10 +78,18 @@ ebook-crop input.pdf -o output.pdf
 ebook-crop input.pdf -c my_config.toml
 ```
 
+### 自訂批次目錄
+
+```bash
+ebook-crop -i my_input -d my_output
+```
+
 ## 專案結構
 
 ```
 ebook-crop/
+├── input/           # 批次模式輸入目錄（Git 排除）
+├── output/          # 批次模式輸出目錄（Git 排除）
 ├── config.toml      # 留白裁切設定
 ├── pyproject.toml   # 專案與依賴設定
 ├── README.md
