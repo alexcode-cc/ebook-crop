@@ -2,6 +2,9 @@
 input/
 output/
 
+# 本機設定（使用 config-sample.toml 複製為 config.toml）
+config.toml
+
 # 虛擬環境
 .venv/
 venv/
