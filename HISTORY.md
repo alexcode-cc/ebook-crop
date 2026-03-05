@@ -2,6 +2,14 @@
 
 本專案遵循 [語意化版本](https://semver.org/lang/zh-TW/)。
 
+## [Unreleased]
+
+## [1.1.0] - 2026-03-05
+
+### 重構
+
+- **模組化拆分**：將 `main.py` 拆為 `cli.py`、`config.py`、`rotation.py`、`crop.py`、`utils.py`，各職責分離
+
 ## [1.0.0] - 2026-03-05
 
 ### 新增
@@ -41,5 +49,7 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.0
 [1.0.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.0.0
 [0.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v0.1.0
