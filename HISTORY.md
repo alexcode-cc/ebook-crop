@@ -4,6 +4,12 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-03-05
+
+### Added
+
+- **Auto-margin result display**: Show per-file detection summary (crop count, margin ranges) after processing; per-page details available with `-v`
+
 ## [1.6.0] - 2026-03-05
 
 ### Added
@@ -127,7 +133,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0

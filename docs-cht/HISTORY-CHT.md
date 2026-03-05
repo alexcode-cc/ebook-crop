@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-03-05
+
+### 新增
+
+- **自動偵測結果顯示**：處理完成後顯示每檔偵測摘要（裁切頁數、留白範圍）；使用 `-v` 可查看每頁詳細資訊
+
 ## [1.6.0] - 2026-03-05
 
 ### 新增
@@ -127,7 +133,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
