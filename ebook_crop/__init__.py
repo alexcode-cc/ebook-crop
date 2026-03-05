@@ -1,3 +1,3 @@
 """PDF ebook margin cropping tool with arbitrary-angle page rotation"""
 
-__version__ = "1.5.0"
+__version__ = "1.5.1"
