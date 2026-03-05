@@ -10,7 +10,7 @@ Follow these rules when making Git commits:
 ## Reference
 
 - [AngularJS Git Commit Message Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit)
-- See `CONTRIBUTING.md` (English) or `CONTRIBUTING-CHT.md` (繁體中文)
+- See `CONTRIBUTING.md` (English) or `docs-cht/CONTRIBUTING-CHT.md` (繁體中文)
 
 ## Format
 

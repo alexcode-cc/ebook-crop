@@ -343,7 +343,7 @@ Key remaining directions include:
 | `tests/generate_samples.py` | Sample PDF generator |
 | `tests/input/` | Sample PDFs and test configs |
 | `CONTRIBUTING.md` | Commit conventions |
-| `CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
+| `docs-cht/CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
 | `CLAUDE.md` | Claude Code guidance |
 | `.gitignore` | Excludes input/, output/, config.toml, .venv, etc. |
 

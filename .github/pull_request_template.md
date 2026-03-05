@@ -17,4 +17,4 @@ Closes #(issue number) / 關聯 #(issue 編號)
 
 - [ ] Code follows project style / 程式碼遵循專案風格
 - [ ] Related docs updated / 已更新相關文件
-- [ ] Commit messages follow [CONTRIBUTING.md](../CONTRIBUTING.md) or [CONTRIBUTING-CHT.md](../CONTRIBUTING-CHT.md)
+- [ ] Commit messages follow [CONTRIBUTING.md](../CONTRIBUTING.md) or [CONTRIBUTING-CHT.md](../docs-cht/CONTRIBUTING-CHT.md)

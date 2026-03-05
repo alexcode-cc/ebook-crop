@@ -320,7 +320,7 @@ ebook_crop/
 
 - 規範：AngularJS Git Commit Message Conventions
 - 語言：英文或繁體中文
-- 詳見：`CONTRIBUTING.md`（English）、`CONTRIBUTING-CHT.md`（繁體中文）
+- 詳見：`CONTRIBUTING.md`（English）、`docs-cht/CONTRIBUTING-CHT.md`（繁體中文）
 
 ### 8.2 專案慣例
 
@@ -345,7 +345,7 @@ ebook_crop/
 | `ebook_crop/console.py` | 終端機輸出（彩色輸出、進度條） |
 | `ebook_crop/utils.py` | 共用工具 |
 | `CONTRIBUTING.md` | Commit 規範（English） |
-| `CONTRIBUTING-CHT.md` | Commit 規範（繁體中文） |
+| `docs-cht/CONTRIBUTING-CHT.md` | Commit 規範（繁體中文） |
 | `CLAUDE.md` | Claude Code 輔助指引 |
 | `tests/conftest.py` | 測試共用 fixtures |
 | `tests/test_config.py` | Config 單元測試（53 個） |

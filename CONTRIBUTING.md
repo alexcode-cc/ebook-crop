@@ -3,7 +3,7 @@
 Contributions from developers worldwide are welcome. This project supports both English and Traditional Chinese documentation.
 
 - **English** (this file)
-- **繁體中文**: [CONTRIBUTING-CHT.md](CONTRIBUTING-CHT.md)
+- **繁體中文**: [CONTRIBUTING-CHT.md](docs-cht/CONTRIBUTING-CHT.md)
 
 ## Git Commit Message Conventions
 

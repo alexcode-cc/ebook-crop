@@ -10,7 +10,7 @@ contact_links:
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs-cht/TECHNICAL_ANALYSIS.md
     about: 專案技術分析與架構說明
   - name: 貢獻指南（繁體中文）
-    url: https://github.com/alexcode-cc/ebook-crop/blob/main/CONTRIBUTING-CHT.md
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs-cht/CONTRIBUTING-CHT.md
     about: Commit 規範與貢獻流程
   - name: Code of Conduct
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/CODE_OF_CONDUCT.md

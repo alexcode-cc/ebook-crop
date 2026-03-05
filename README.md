@@ -221,7 +221,6 @@ ebook-crop/
 ├── input/             # Batch input (gitignored)
 ├── output/            # Batch output (gitignored)
 ├── HISTORY.md         # Changelog (English)
-├── HISTORY-CHT.md     # Changelog (Traditional Chinese)
 ├── LICENSE            # MIT
 ├── README.md          # Project readme (English)
 ├── README-CHT.md      # Project readme (Traditional Chinese)
@@ -241,7 +240,7 @@ uv run pytest --cov -v
 Issues and Pull Requests are welcome from contributors worldwide. Please follow [CONTRIBUTING.md](CONTRIBUTING.md) for commit conventions and [Code of Conduct](CODE_OF_CONDUCT.md).
 
 - **English docs**: [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [HISTORY.md](HISTORY.md)
-- **Traditional Chinese (繁體中文)**: [README-CHT.md](README-CHT.md), [CONTRIBUTING-CHT.md](CONTRIBUTING-CHT.md), [docs-cht/](docs-cht/)
+- **Traditional Chinese (繁體中文)**: [README-CHT.md](README-CHT.md), [CONTRIBUTING-CHT.md](docs-cht/CONTRIBUTING-CHT.md), [docs-cht/](docs-cht/)
 
 ### Technical docs
 

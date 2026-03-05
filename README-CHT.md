@@ -219,7 +219,6 @@ ebook-crop/
 ├── input/             # 批次輸入（Git 排除）
 ├── output/            # 批次輸出（Git 排除）
 ├── HISTORY.md         # 變更紀錄（英文）
-├── HISTORY-CHT.md     # 變更紀錄（繁體中文）
 ├── LICENSE            # MIT 授權
 ├── README.md          # 專案說明（英文）
 ├── README-CHT.md      # 專案說明（繁體中文）
@@ -236,14 +235,14 @@ uv run pytest --cov -v
 
 ### 貢獻
 
-歡迎提交 Issue 與 Pull Request。請遵循 [CONTRIBUTING-CHT.md](CONTRIBUTING-CHT.md) 中的 Commit 規範，並遵守 [行為準則](CODE_OF_CONDUCT-CHT.md)。
+歡迎提交 Issue 與 Pull Request。請遵循 [CONTRIBUTING-CHT.md](docs-cht/CONTRIBUTING-CHT.md) 中的 Commit 規範，並遵守 [行為準則](docs-cht/CODE_OF_CONDUCT-CHT.md)。
 
 ### 繁體中文文件
 
-- [貢獻指南](CONTRIBUTING-CHT.md)
-- [行為準則](CODE_OF_CONDUCT-CHT.md)
-- [安全政策](SECURITY-CHT.md)
-- [變更紀錄](HISTORY-CHT.md)
+- [貢獻指南](docs-cht/CONTRIBUTING-CHT.md)
+- [行為準則](docs-cht/CODE_OF_CONDUCT-CHT.md)
+- [安全政策](docs-cht/SECURITY-CHT.md)
+- [變更紀錄](docs-cht/HISTORY-CHT.md)
 - [技術文件](docs-cht/README.md)
 
 ### 技術文件
