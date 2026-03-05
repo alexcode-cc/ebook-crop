@@ -17,6 +17,11 @@ dependencies = [
     "tomli>=2.0.0",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/alexcode-cc/ebook-crop"
 Repository = "https://github.com/alexcode-cc/ebook-crop"
@@ -24,6 +29,14 @@ Documentation = "https://github.com/alexcode-cc/ebook-crop#readme"
 
 [project.scripts]
 ebook-crop = "ebook_crop.main:main"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+exclude = [".venv", ".git", "__pycache__", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
 
 [build-system]
 requires = ["hatchling"]
