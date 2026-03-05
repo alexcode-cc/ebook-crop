@@ -45,40 +45,30 @@ Modules are separated with clear responsibilities.
 
 ### 2.2 Data Flow
 
-```mermaid
-flowchart TD
-    subgraph Input [Input]
-        A[config.toml]
-        B[PDF file]
-    end
-
-    subgraph Parse [Parse]
-        C[load_config]
-        D[parse_rotation_list]
-    end
-
-    subgraph Process [Process]
-        E{Rotation?}
-        F[build_pdf_with_rotation]
-        G[_apply_crop]
-        H[doc.save]
-    end
-
-    subgraph Output [Output]
-        I[output/*.pdf]
-        J[output/*.toml]
-    end
-
-    A --> C
-    C --> D
-    B --> E
-    D --> E
-    E -->|Yes| F
-    E -->|No| G
-    F --> G
-    G --> H
-    H --> I
-    C --> J
+```
+┌─────────────────────────────────────────────────────┐
+│  Input                                              │
+│    config.toml ──► load_config ──► parse_rotation    │
+│    PDF file ─────────────────────────┐              │
+└──────────────────────────────────────┼──────────────┘
+                                       ▼
+                                 ┌──────────┐
+                                 │ Rotation? │
+                                 └────┬─────┘
+                          ┌───────────┼───────────┐
+                          ▼ Yes                    ▼ No
+               build_pdf_with_rotation             │
+                          │                        │
+                          └───────┬────────────────┘
+                                  ▼
+                             _apply_crop
+                                  │
+                                  ▼
+                              doc.save
+                                  │
+                      ┌───────────┼───────────┐
+                      ▼                       ▼
+                output/*.pdf            output/*.toml
 ```
 
 ### 2.3 Processing Order

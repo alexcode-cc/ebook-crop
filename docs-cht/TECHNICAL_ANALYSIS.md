@@ -45,40 +45,30 @@ ebook_crop/
 
 ### 2.2 資料流
 
-```mermaid
-flowchart TD
-    subgraph Input [輸入]
-        A[config.toml]
-        B[PDF 檔案]
-    end
-
-    subgraph Parse [解析]
-        C[load_config]
-        D[parse_rotation_list]
-    end
-
-    subgraph Process [處理]
-        E{有旋轉?}
-        F[build_pdf_with_rotation]
-        G[_apply_crop]
-        H[doc.save]
-    end
-
-    subgraph Output [輸出]
-        I[output/*.pdf]
-        J[output/*.toml]
-    end
-
-    A --> C
-    C --> D
-    B --> E
-    D --> E
-    E -->|是| F
-    E -->|否| G
-    F --> G
-    G --> H
-    H --> I
-    C --> J
+```
+┌─────────────────────────────────────────────────────┐
+│  輸入                                                │
+│    config.toml ──► load_config ──► parse_rotation    │
+│    PDF 檔案 ─────────────────────────┐              │
+└──────────────────────────────────────┼──────────────┘
+                                       ▼
+                                 ┌──────────┐
+                                 │ 有旋轉?   │
+                                 └────┬─────┘
+                          ┌───────────┼───────────┐
+                          ▼ 是                     ▼ 否
+               build_pdf_with_rotation             │
+                          │                        │
+                          └───────┬────────────────┘
+                                  ▼
+                             _apply_crop
+                                  │
+                                  ▼
+                              doc.save
+                                  │
+                      ┌───────────┼───────────┐
+                      ▼                       ▼
+                output/*.pdf            output/*.toml
 ```
 
 ### 2.3 處理順序
