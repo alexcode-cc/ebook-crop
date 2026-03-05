@@ -187,7 +187,7 @@ def _dry_run(
             con.error(t("err_input_dir_not_found", path=input_dir))
             sys.exit(1)
 
-        pdf_files = sorted(input_dir.glob("*.pdf")) + sorted(input_dir.glob("*.PDF"))
+        pdf_files = sorted(set(input_dir.glob("*.pdf")) | set(input_dir.glob("*.PDF")))
         if not pdf_files:
             con.error(t("err_no_pdf_files", path=input_dir))
             sys.exit(1)
@@ -269,7 +269,7 @@ def _batch_mode(
         sys.exit(1)
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    pdf_files = sorted(input_dir.glob("*.pdf")) + sorted(input_dir.glob("*.PDF"))
+    pdf_files = sorted(set(input_dir.glob("*.pdf")) | set(input_dir.glob("*.PDF")))
 
     if not pdf_files:
         con.error(t("err_no_pdf_files", path=input_dir))
