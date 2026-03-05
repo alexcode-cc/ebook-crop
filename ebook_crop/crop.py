@@ -58,7 +58,7 @@ def crop_pdf(
     end_page: int = 0,
     rotation_list: list[dict] | None = None,
     auto_margins: dict | None = None,
-) -> None:
+) -> list[dict] | None:
     """
     裁切 PDF 留白區域，可選套用頁面旋轉。
 
@@ -70,9 +70,13 @@ def crop_pdf(
         end_page: 結束裁切頁數，0=至最後，-1=不含最後一頁
         rotation_list: [[rotation]] 設定
         auto_margins: 自動偵測留白設定，含 offsets
+
+    Returns:
+        自動偵測模式時回傳每頁偵測結果列表，手動模式回傳 None
     """
     src_doc = fitz.open(input_path)
     doc: fitz.Document | None = None
+    auto_results: list[dict] | None = None
 
     try:
         if rotation_list:
@@ -87,7 +91,7 @@ def crop_pdf(
 
         if auto_margins is not None:
             offsets = auto_margins.get("offsets")
-            automargin.apply_auto_crop(doc, start_page, end_page, offsets)
+            auto_results = automargin.apply_auto_crop(doc, start_page, end_page, offsets)
         else:
             _apply_crop(doc, margins, start_page, end_page)
 
@@ -97,3 +101,5 @@ def crop_pdf(
             src_doc.close()
         if doc is not None:
             doc.close()
+
+    return auto_results

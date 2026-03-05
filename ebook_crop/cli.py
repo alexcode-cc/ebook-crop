@@ -7,7 +7,46 @@ import sys
 from pathlib import Path
 
 from ebook_crop import __version__, config, crop, utils
+from ebook_crop.config import format_margins_display
 from ebook_crop.console import NORMAL, QUIET, VERBOSE, AppConsole
+
+
+def _show_auto_results(con: AppConsole, results: list[dict], filename: str = "") -> None:
+    """顯示自動偵測留白的結果摘要"""
+    if not results:
+        return
+
+    cropped = [r for r in results if "margins" in r]
+    skipped = [r for r in results if "skipped" in r]
+
+    label = f"  [{filename}] " if filename else "  "
+
+    if cropped:
+        # 計算所有頁面的留白統計
+        lefts = [r["margins"]["left"] for r in cropped]
+        rights = [r["margins"]["right"] for r in cropped]
+        tops = [r["margins"]["top"] for r in cropped]
+        bottoms = [r["margins"]["bottom"] for r in cropped]
+
+        con.info(
+            f"{label}自動偵測結果：{len(cropped)} 頁裁切"
+            + (f"、{len(skipped)} 頁跳過" if skipped else "")
+        )
+        con.info(
+            f"{label}留白範圍（點）：左 {min(lefts):.1f}~{max(lefts):.1f}, "
+            f"右 {min(rights):.1f}~{max(rights):.1f}, "
+            f"上 {min(tops):.1f}~{max(tops):.1f}, "
+            f"下 {min(bottoms):.1f}~{max(bottoms):.1f}"
+        )
+
+    for r in cropped:
+        m = r["margins"]
+        con.verbose(
+            f"{label}第 {r['page']} 頁：{format_margins_display(m)}"
+        )
+
+    for r in skipped:
+        con.verbose(f"{label}第 {r['page']} 頁：跳過（{r['skipped']}）")
 
 
 def main() -> None:
@@ -230,14 +269,22 @@ def _batch_mode(
 
     con.info(f"批次模式：從 {input_dir} 處理 {len(pdf_files)} 個檔案至 {output_dir}")
 
+    all_results: list[tuple[str, list[dict]]] = []
+
     with con.progress(len(pdf_files), "批次裁切") as tracker:
         for input_path in pdf_files:
             output_path = output_dir / input_path.name
             con.verbose(f"裁切中：{input_path.name} -> {output_path}")
-            crop.crop_pdf(input_path, output_path, margins, start_page, end_page,
-                          rotation_list, auto_margins)
+            results = crop.crop_pdf(input_path, output_path, margins, start_page, end_page,
+                                    rotation_list, auto_margins)
             utils.save_config_to_output(args.config.resolve(), output_path)
+            if results is not None:
+                all_results.append((input_path.name, results))
             tracker.advance()
+
+    if all_results:
+        for filename, results in all_results:
+            _show_auto_results(con, results, filename)
 
     con.success("完成！")
 
@@ -268,7 +315,11 @@ def _single_mode(
         output_path = output_path.with_suffix(".pdf")
 
     con.safe_print(f"裁切中：{args.input} -> {output_path}")
-    crop.crop_pdf(args.input, output_path, margins, start_page, end_page,
-                  rotation_list, auto_margins)
+    results = crop.crop_pdf(args.input, output_path, margins, start_page, end_page,
+                            rotation_list, auto_margins)
     utils.save_config_to_output(args.config.resolve(), output_path)
+
+    if results is not None:
+        _show_auto_results(con, results)
+
     con.success("完成！")

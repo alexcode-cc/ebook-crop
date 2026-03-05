@@ -87,7 +87,7 @@ def apply_auto_crop(
     start_page: int,
     end_page: int,
     offsets: dict[str, float] | None = None,
-) -> None:
+) -> list[dict]:
     """
     對文件各頁自動偵測內容邊界並套用裁切。
 
@@ -98,12 +98,16 @@ def apply_auto_crop(
         start_page: 開始裁切頁數（1-based）
         end_page: 結束裁切頁數，0=至最後，-1=不含最後一頁
         offsets: 微調偏移量
+
+    Returns:
+        每頁偵測結果列表，每筆含 page（1-based）、margins 或 skipped 原因
     """
     import sys
 
     total_pages = len(doc)
     start_index = (start_page - 1) if start_page > 0 else 0
     end_index = (total_pages - 2) if end_page == -1 else (total_pages - 1)
+    results: list[dict] = []
 
     for page_num in range(total_pages):
         if page_num < start_index or page_num > end_index:
@@ -117,6 +121,7 @@ def apply_auto_crop(
                 f"警告：第 {page_num + 1} 頁無法偵測內容邊界，跳過裁切",
                 file=sys.stderr,
             )
+            results.append({"page": page_num + 1, "skipped": "無內容"})
             continue
 
         rect = page.rect
@@ -132,6 +137,10 @@ def apply_auto_crop(
                 f"警告：第 {page_num + 1} 頁自動裁切區域無效，跳過裁切",
                 file=sys.stderr,
             )
+            results.append({"page": page_num + 1, "skipped": "裁切區域無效"})
             continue
 
         page.set_cropbox(crop_rect)
+        results.append({"page": page_num + 1, "margins": margins})
+
+    return results
