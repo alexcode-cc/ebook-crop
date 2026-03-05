@@ -46,6 +46,43 @@ def load_config(config_path: Path) -> dict:
         return tomli.load(f)
 
 
+def _format_rotation_display(rotation_list: list[dict]) -> str:
+    """將 rotation 設定格式化為顯示字串，含頁次與角度。"""
+    parts: list[str] = []
+    for r in rotation_list:
+        angle = float(r.get("angle", 0))
+        angle_str = f"{angle:g}°"
+
+        if "pages" in r:
+            val = r["pages"]
+            skip = int(r.get("skip", 0))
+            if isinstance(val, str):
+                val = val.strip()
+                if "-" in val and "," not in val:
+                    parts_range = val.split("-", 1)
+                    start_raw, end_raw = parts_range[0].strip(), parts_range[1].strip()
+                    if end_raw == "0":
+                        pages_str = f"第 {start_raw if start_raw != '0' else '1'} 頁至最後一頁"
+                    else:
+                        pages_str = f"第 {val} 頁"
+                    if skip > 0:
+                        pages_str += f"（每隔{skip}頁）"
+                else:
+                    pages_str = f"第 {val} 頁"
+            elif isinstance(val, (list, tuple)):
+                pages_str = f"第 {','.join(str(x) for x in val)} 頁"
+            else:
+                pages_str = f"第 {val} 頁"
+        elif "page" in r:
+            p = int(r["page"])
+            pages_str = f"第 {p} 頁"
+        else:
+            continue
+
+        parts.append(f"{pages_str} {angle_str}")
+    return "；".join(parts)
+
+
 def _parse_rotation_list(
     rotation_list: list[dict],
     total_pages: int = 0,
@@ -324,13 +361,7 @@ def main() -> None:
     print(f"頁數範圍：從第 {start_page} 頁開始，"
           f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
     if rotation_list:
-        # 顯示用：無 total_pages 時可能無法解析 "X-0"，僅顯示有解析到的頁碼
-        rotation_map = _parse_rotation_list(rotation_list, 0)
-        if rotation_map:
-            pages_str = ", ".join(str(i + 1) for i in rotation_map)
-            print(f"旋轉頁面：第 {pages_str} 頁")
-        else:
-            print("旋轉頁面：依 config 設定（含範圍至最後一頁）")
+        print(f"旋轉頁面：{_format_rotation_display(rotation_list)}")
 
     if args.input is None and args.output is None:
         # 批次模式：處理 input/ 目錄內所有 PDF
