@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-03-05
+
+### 修正
+
+- **CI**：使用 `uv run ebook-crop` 取代直接執行，修正 GitHub Actions 中 PATH 問題
+
 ## [1.1.0] - 2026-03-05
 
 ### 重構
@@ -49,7 +55,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.1
 [1.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.0
 [1.0.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.0.0
 [0.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v0.1.0

@@ -28,7 +28,7 @@ assignees: ''
 
 - OS: [例如 Windows 11]
 - Python 版本: [例如 3.10]
-- ebook-crop 版本: [例如 1.1.0]
+- ebook-crop 版本: [例如 1.1.1]
 
 ## 額外資訊
 

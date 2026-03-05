@@ -1,6 +1,6 @@
 [project]
 name = "ebook-crop"
-version = "1.1.0"
+version = "1.1.1"
 description = "裁切 PDF 留白區域，支援頁面旋轉任意角度，優化電子書閱讀版面"
 readme = "README.md"
 license = "MIT"
