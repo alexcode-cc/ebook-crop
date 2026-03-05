@@ -1,6 +1,6 @@
 [project]
 name = "ebook-crop"
-version = "1.3.0"
+version = "1.4.0"
 description = "PDF ebook margin cropping with arbitrary-angle page rotation for optimized reading layout"
 readme = "README.md"
 license = "MIT"
@@ -16,6 +16,7 @@ classifiers = [
 ]
 dependencies = [
     "pymupdf>=1.24.0",
+    "rich>=13.0.0",
     "tomli>=2.0.0",
 ]
 
