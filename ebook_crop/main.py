@@ -46,6 +46,35 @@ def load_config(config_path: Path) -> dict:
         return tomli.load(f)
 
 
+def _parse_rotation_list(rotation_list: list[dict]) -> dict[int, float]:
+    """
+    解析 [[rotation]] 設定，支援 page（單頁）與 pages（多頁，逗號分隔或陣列）。
+    回傳 {page_index: angle}，0-based，已排序。
+    """
+    rotation_map: dict[int, float] = {}
+    for r in rotation_list:
+        a = float(r.get("angle", 0))
+        pages: list[int] = []
+
+        if "pages" in r:
+            val = r["pages"]
+            if isinstance(val, str):
+                pages = [int(x.strip()) for x in val.split(",") if x.strip()]
+            elif isinstance(val, list):
+                pages = [int(x) for x in val]
+
+        if "page" in r:
+            p = int(r["page"])
+            if p > 0:
+                pages.append(p)
+
+        for p in pages:
+            if p > 0:
+                rotation_map[p - 1] = a  # 1-based -> 0-based
+
+    return dict(sorted(rotation_map.items()))
+
+
 def _get_rotated_page_rect(src_page: fitz.Page, angle: float) -> fitz.Rect:
     """取得旋轉後頁面的邊界矩形。90°、270° 時寬高對調。"""
     rect = src_page.rect
@@ -184,18 +213,12 @@ def crop_pdf(
         margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
         start_page: 開始裁切頁數（1-based），0或1=封面也裁切，2=封面不裁切
         end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
-        rotation_list: [[rotation]] 設定，每筆含 page（1-based）、angle
+        rotation_list: [[rotation]] 設定，每筆含 page 或 pages（1-based）、angle
     """
     src_doc = fitz.open(input_path)
 
     if rotation_list:
-        rotation_map = {}
-        for r in rotation_list:
-            p = int(r.get("page", 0))
-            a = float(r.get("angle", 0))
-            if p > 0:
-                rotation_map[p - 1] = a  # 1-based -> 0-based
-        rotation_map = dict(sorted(rotation_map.items()))
+        rotation_map = _parse_rotation_list(rotation_list)
         doc = build_pdf_with_rotation(src_doc, rotation_map)
         if doc is not src_doc:
             src_doc.close()
@@ -261,7 +284,8 @@ def main() -> None:
     print(f"頁數範圍：從第 {start_page} 頁開始，"
           f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
     if rotation_list:
-        pages_str = ", ".join(str(r.get("page", "?")) for r in rotation_list)
+        rotation_map = _parse_rotation_list(rotation_list)
+        pages_str = ", ".join(str(i + 1) for i in rotation_map)
         print(f"旋轉頁面：第 {pages_str} 頁")
 
     if args.input is None and args.output is None:
