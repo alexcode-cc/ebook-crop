@@ -46,11 +46,15 @@ def load_config(config_path: Path) -> dict:
         return tomli.load(f)
 
 
-def _parse_rotation_list(rotation_list: list[dict]) -> dict[int, float]:
+def _parse_rotation_list(
+    rotation_list: list[dict],
+    total_pages: int = 0,
+) -> dict[int, float]:
     """
     解析 [[rotation]] 設定，支援：
     - page：單頁
-    - pages：多頁，可為 "1,3,5" 或 "3-9" 範圍，搭配 skip 可跳頁（如 skip=1 表示每隔一頁）
+    - pages：多頁，可為 "1,3,5"、"3-9" 或 "3-0"（0=最後一頁）、"0-0"（全文件）
+    - skip：搭配範圍使用，每隔 N 頁取一頁
     回傳 {page_index: angle}，0-based，已排序。
     """
     rotation_map: dict[int, float] = {}
@@ -69,14 +73,17 @@ def _parse_rotation_list(rotation_list: list[dict]) -> dict[int, float]:
             elif isinstance(val, str):
                 val = val.strip()
                 if "-" in val and "," not in val:
-                    # 範圍格式：3-9
+                    # 範圍格式：3-9 或 3-0（0=最後一頁）、0-0（全文件）
                     parts = val.split("-", 1)
                     if len(parts) == 2:
-                        start = int(parts[0].strip())
-                        end = int(parts[1].strip())
-                        if start <= end:
+                        start_raw = parts[0].strip()
+                        end_raw = parts[1].strip()
+                        start = 1 if start_raw == "0" else int(start_raw)
+                        end = total_pages if end_raw == "0" and total_pages > 0 else int(end_raw)
+                        if end_raw == "0" and total_pages <= 0:
+                            continue  # 無法解析「至最後一頁」，跳過此區塊
+                        if start <= end and end > 0:
                             range_pages = list(range(start, end + 1))
-                            # skip=1 表示每隔一頁 -> 取 0, 2, 4, 6...
                             step = skip + 1
                             pages = [range_pages[i] for i in range(0, len(range_pages), step)]
                 else:
@@ -240,7 +247,7 @@ def crop_pdf(
     src_doc = fitz.open(input_path)
 
     if rotation_list:
-        rotation_map = _parse_rotation_list(rotation_list)
+        rotation_map = _parse_rotation_list(rotation_list, len(src_doc))
         doc = build_pdf_with_rotation(src_doc, rotation_map)
         if doc is not src_doc:
             src_doc.close()
@@ -306,9 +313,13 @@ def main() -> None:
     print(f"頁數範圍：從第 {start_page} 頁開始，"
           f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
     if rotation_list:
-        rotation_map = _parse_rotation_list(rotation_list)
-        pages_str = ", ".join(str(i + 1) for i in rotation_map)
-        print(f"旋轉頁面：第 {pages_str} 頁")
+        # 顯示用：無 total_pages 時可能無法解析 "X-0"，僅顯示有解析到的頁碼
+        rotation_map = _parse_rotation_list(rotation_list, 0)
+        if rotation_map:
+            pages_str = ", ".join(str(i + 1) for i in rotation_map)
+            print(f"旋轉頁面：第 {pages_str} 頁")
+        else:
+            print("旋轉頁面：依 config 設定（含範圍至最後一頁）")
 
     if args.input is None and args.output is None:
         # 批次模式：處理 input/ 目錄內所有 PDF
