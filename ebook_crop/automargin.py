@@ -104,6 +104,8 @@ def apply_auto_crop(
     """
     import sys
 
+    from ebook_crop.i18n import t
+
     total_pages = len(doc)
     start_index = (start_page - 1) if start_page > 0 else 0
     end_index = (total_pages - 2) if end_page == -1 else (total_pages - 1)
@@ -117,11 +119,8 @@ def apply_auto_crop(
         margins = compute_auto_margins(page, offsets)
 
         if margins is None:
-            print(
-                f"警告：第 {page_num + 1} 頁無法偵測內容邊界，跳過裁切",
-                file=sys.stderr,
-            )
-            results.append({"page": page_num + 1, "skipped": "無內容"})
+            print(t("warn_no_content", page=page_num + 1), file=sys.stderr)
+            results.append({"page": page_num + 1, "skipped": t("skip_no_content")})
             continue
 
         rect = page.rect
@@ -133,11 +132,8 @@ def apply_auto_crop(
         )
 
         if crop_rect.width <= 0 or crop_rect.height <= 0:
-            print(
-                f"警告：第 {page_num + 1} 頁自動裁切區域無效，跳過裁切",
-                file=sys.stderr,
-            )
-            results.append({"page": page_num + 1, "skipped": "裁切區域無效"})
+            print(t("warn_auto_invalid_crop", page=page_num + 1), file=sys.stderr)
+            results.append({"page": page_num + 1, "skipped": t("skip_invalid_crop")})
             continue
 
         page.set_cropbox(crop_rect)

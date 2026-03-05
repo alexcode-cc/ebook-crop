@@ -6,6 +6,8 @@ import sys
 
 import fitz  # PyMuPDF
 
+from ebook_crop.i18n import t
+
 
 def _get_rotated_page_rect(src_page: fitz.Page, angle: float) -> fitz.Rect:
     """取得旋轉後頁面的邊界矩形。90°、270° 時寬高對調。"""
@@ -39,7 +41,7 @@ def build_pdf_with_rotation(
     valid_rotations = [(i, a) for i, a in sorted_rotations if 0 <= i < total_pages]
     for i, _ in sorted_rotations:
         if i < 0 or i >= total_pages:
-            print(f"警告：旋轉頁碼 {i + 1} 超出範圍（共 {total_pages} 頁），跳過", file=sys.stderr)
+            print(t("warn_rotation_out_of_range", page=i + 1, total=total_pages), file=sys.stderr)
 
     if not valid_rotations:
         return src_doc

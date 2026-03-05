@@ -1,4 +1,4 @@
-"""終端機輸出模組，提供彩色輸出、進度條與詳細/靜默模式"""
+"""Terminal output module with colored output, progress bar, and verbosity control"""
 
 from __future__ import annotations
 
@@ -7,6 +7,8 @@ from enum import IntEnum
 
 from rich.console import Console
 from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn, TimeRemainingColumn
+
+from ebook_crop.i18n import t
 
 QUIET = 0
 NORMAL = 1
@@ -20,7 +22,7 @@ class Verbosity(IntEnum):
 
 
 class AppConsole:
-    """應用程式輸出控制台，支援詳細/靜默模式與彩色輸出"""
+    """Application console with verbosity control and colored output"""
 
     def __init__(self, verbosity: int = NORMAL) -> None:
         self.verbosity = verbosity
@@ -28,30 +30,32 @@ class AppConsole:
         self._err_console = Console(stderr=True)
 
     def info(self, msg: str) -> None:
-        """一般資訊（NORMAL 及以上顯示）"""
+        """Normal info (NORMAL and above)"""
         if self.verbosity >= NORMAL:
             self._console.print(msg)
 
     def verbose(self, msg: str) -> None:
-        """詳細資訊（僅 VERBOSE 顯示）"""
+        """Verbose info (VERBOSE only)"""
         if self.verbosity >= VERBOSE:
             self._console.print(f"[dim]{msg}[/dim]")
 
     def warning(self, msg: str) -> None:
-        """警告訊息（始終顯示至 stderr）"""
-        self._err_console.print(f"[yellow]警告：{msg}[/yellow]")
+        """Warning (always shown to stderr)"""
+        prefix = t("warning_prefix")
+        self._err_console.print(f"[yellow]{prefix}{msg}[/yellow]")
 
     def error(self, msg: str) -> None:
-        """錯誤訊息（始終顯示至 stderr）"""
-        self._err_console.print(f"[red bold]錯誤：{msg}[/red bold]")
+        """Error (always shown to stderr)"""
+        prefix = t("error_prefix")
+        self._err_console.print(f"[red bold]{prefix}{msg}[/red bold]")
 
     def success(self, msg: str) -> None:
-        """成功訊息（NORMAL 及以上顯示）"""
+        """Success (NORMAL and above)"""
         if self.verbosity >= NORMAL:
             self._console.print(f"[green]{msg}[/green]")
 
     def safe_print(self, msg: str) -> None:
-        """Unicode-safe 輸出（NORMAL 及以上顯示）"""
+        """Unicode-safe output (NORMAL and above)"""
         if self.verbosity >= NORMAL:
             try:
                 self._console.print(msg, highlight=False)
@@ -62,8 +66,8 @@ class AppConsole:
                 )
 
     @contextmanager
-    def progress(self, total: int, description: str = "處理中"):
-        """批次處理進度條（QUIET 模式下不顯示）"""
+    def progress(self, total: int, description: str = "Processing"):
+        """Batch processing progress bar (hidden in QUIET mode)"""
         if self.verbosity <= QUIET:
             yield _NoOpProgress()
             return
@@ -81,7 +85,7 @@ class AppConsole:
 
 
 class _ProgressTracker:
-    """進度條追蹤器"""
+    """Progress bar tracker"""
 
     def __init__(self, progress: Progress, task_id) -> None:
         self._progress = progress
@@ -92,7 +96,7 @@ class _ProgressTracker:
 
 
 class _NoOpProgress:
-    """靜默模式下的空操作進度條"""
+    """No-op progress bar for quiet mode"""
 
     def advance(self, amount: int = 1) -> None:
         pass

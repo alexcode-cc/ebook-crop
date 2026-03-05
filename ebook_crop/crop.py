@@ -8,6 +8,7 @@ from pathlib import Path
 import fitz  # PyMuPDF
 
 from ebook_crop import automargin, config, rotation
+from ebook_crop.i18n import t
 
 
 def _apply_crop(
@@ -41,10 +42,7 @@ def _apply_crop(
         )
 
         if crop_rect.width <= 0 or crop_rect.height <= 0:
-            print(
-                f"警告：第 {page_num + 1} 頁裁切區域無效，跳過裁切",
-                file=sys.stderr,
-            )
+            print(t("warn_invalid_crop", page=page_num + 1), file=sys.stderr)
             continue
 
         page.set_cropbox(crop_rect)
