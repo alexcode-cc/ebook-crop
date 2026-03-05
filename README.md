@@ -1,6 +1,6 @@
 # ebook-crop
 
-[![CI](https://github.com/alexcode-cc/ebook-crop/actions/workflows/ci.yml/badge.svg)](https://github.com/alexcode-cc/ebook-crop/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/alexcode-cc/ebook-crop/ci.yml?branch=main)](https://github.com/alexcode-cc/ebook-crop/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
