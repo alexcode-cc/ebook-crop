@@ -4,6 +4,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-03-05
+
+### Changed
+
+- **i18n**: Default CLI output now in English for internationalization; use `--cht` flag for Traditional Chinese messages
+- **i18n module**: New `ebook_crop/i18n.py` with EN/CHT message dictionaries and `t()` translation function
+
 ## [1.6.1] - 2026-03-05
 
 ### Added
@@ -133,7 +140,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.2...HEAD
+[1.6.2]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1

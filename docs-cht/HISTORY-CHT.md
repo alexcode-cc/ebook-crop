@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-03-05
+
+### 變更
+
+- **國際化**：CLI 預設輸出改為英文訊息；使用 `--cht` 旗標顯示繁體中文訊息
+- **i18n 模組**：新增 `ebook_crop/i18n.py`，含 EN/CHT 訊息字典與 `t()` 翻譯函式
+
 ## [1.6.1] - 2026-03-05
 
 ### 新增
@@ -133,7 +140,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.2...HEAD
+[1.6.2]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1

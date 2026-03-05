@@ -186,6 +186,7 @@ uv run ebook-crop -i my_input -d my_output
 | `-v, --verbose` | Verbose output with detailed logs |
 | `-q, --quiet` | Quiet mode, suppress non-error output |
 | `--dry-run` | Preview settings and affected pages without processing |
+| `--cht` | Display messages in Traditional Chinese |
 
 ## Rotation config format
 

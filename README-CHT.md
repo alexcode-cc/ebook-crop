@@ -184,6 +184,7 @@ uv run ebook-crop -i my_input -d my_output
 | `-v, --verbose` | 詳細模式，顯示更多處理資訊 |
 | `-q, --quiet` | 靜默模式，僅顯示錯誤訊息 |
 | `--dry-run` | 預覽模式，顯示設定與影響頁面，不實際處理 |
+| `--cht` | 顯示繁體中文訊息 |
 
 ## 旋轉設定格式
 
