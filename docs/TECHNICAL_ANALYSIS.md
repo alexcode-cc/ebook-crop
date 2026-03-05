@@ -73,8 +73,8 @@ flowchart TD
     C --> D
     B --> E
     D --> E
-    E -->|Yes| F
-    E -->|No| G
+    E -- Yes --> F
+    E -- No --> G
     F --> G
     G --> H
     H --> I

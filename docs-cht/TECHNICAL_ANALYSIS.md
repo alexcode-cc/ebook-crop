@@ -73,8 +73,8 @@ flowchart TD
     C --> D
     B --> E
     D --> E
-    E -->|是| F
-    E -->|否| G
+    E -- 是 --> F
+    E -- 否 --> G
     F --> G
     G --> H
     H --> I
