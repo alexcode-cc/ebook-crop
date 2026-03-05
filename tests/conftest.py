@@ -8,8 +8,8 @@ import fitz
 import pytest
 
 # 樣本與輸出目錄
-SAMPLE_DIR = Path(__file__).resolve().parent.parent / "test" / "input"
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "test" / "output"
+SAMPLE_DIR = Path(__file__).resolve().parent / "input"
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 
 
 @pytest.fixture(scope="session", autouse=True)

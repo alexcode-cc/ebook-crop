@@ -2,8 +2,8 @@
 /input/
 /output/
 
-# 測試輸出（測試輸入 test/input/ 需加入 Git）
-test/output/
+# 測試輸出（測試輸入 tests/input/ 需加入 Git）
+tests/output/
 
 # 本機設定（使用 config-sample.toml 複製為 config.toml）
 config.toml

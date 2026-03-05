@@ -1,4 +1,4 @@
-"""生成測試用樣本 PDF 至 test/input/ 目錄"""
+"""生成測試用樣本 PDF 至 tests/input/ 目錄"""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import fitz
 
-SAMPLE_DIR = Path(__file__).resolve().parent.parent / "test" / "input"
+SAMPLE_DIR = Path(__file__).resolve().parent / "input"
 
 
 def _insert_text(page: fitz.Page, text: str) -> None:
