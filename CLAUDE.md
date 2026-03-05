@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ebook-crop (v1.3.0) is a Python CLI tool for cropping PDF ebook margins and applying arbitrary-angle page rotation. It uses PyMuPDF (`fitz`) for PDF manipulation and `tomli` for TOML config parsing.
+ebook-crop (v1.4.0) is a Python CLI tool for cropping PDF ebook margins and applying arbitrary-angle page rotation. It uses PyMuPDF (`fitz`) for PDF manipulation, `tomli` for TOML config parsing, and `rich` for colored terminal output and progress bars.
 
 ## Common Commands
 
@@ -32,6 +32,7 @@ Processing pipeline:
 3. **crop.py** — Orchestrates: opens PDF, applies rotation (if any) then margin cropping via `set_cropbox()`
 4. **rotation.py** — Rebuilds PDF with rotated pages using `show_pdf_page()` (non-rotated pages copied via `insert_pdf`)
 5. **utils.py** — `_safe_print()` for Unicode-safe output, `save_config_to_output()` copies config alongside output PDF
+6. **console.py** — Terminal output module: colored output (warnings yellow, errors red, success green), rich progress bar for batch processing, verbosity control (`-v`/`-q`)
 
 Key design details:
 - Rotation config uses 1-based page numbers; `parse_rotation_list()` converts to 0-based indices
@@ -41,7 +42,7 @@ Key design details:
 
 ## Config Format
 
-Units are PDF points (72pt = 1 inch). See `config-sample.toml` for the template.
+Units are PDF points (72pt = 1 inch) by default. Margin values also accept unit suffixes: `"1cm"`, `"10mm"`, `"0.5in"`, `"0.5inch"`, `"36pt"`. See `config-sample.toml` for the template.
 
 ## Conventions
 

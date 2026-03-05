@@ -115,14 +115,14 @@ ebook-crop input.pdf -o output.pdf
 
 ## 設定檔 config.toml
 
-留白單位：點 (points)，1 英吋 = 72 點
+留白單位：預設為點 (points)，1 英吋 = 72 點。亦可使用其他單位：`"1cm"`、`"10mm"`、`"0.5in"`、`"0.5inch"`、`"36pt"`。
 
 ```toml
 [margins]
 left = 36
 right = 36
-top = 36
-bottom = 36
+top = "1cm"
+bottom = "10mm"
 
 [pages]
 start = 2    # 開始裁切頁數，2=封面不裁切
@@ -135,7 +135,7 @@ skip = 1
 angle = -1
 ```
 
-**留白單位換算**：1 公分 ≈ 28.35 點，0.5 英吋 = 36 點
+**留白單位換算**：1 公分 ≈ 28.35 點，0.5 英吋 = 36 點。支援單位：`cm`、`mm`、`in`/`inch`、`pt`
 
 ## 使用方式
 
@@ -171,6 +171,10 @@ uv run ebook-crop -i my_input -d my_output
 | `-c, --config` | 設定檔路徑 |
 | `-i, --input-dir` | 批次輸入目錄 |
 | `-d, --output-dir` | 批次輸出目錄 |
+| `--version` | 顯示目前版本 |
+| `-v, --verbose` | 詳細模式，顯示更多處理資訊 |
+| `-q, --quiet` | 靜默模式，僅顯示錯誤訊息 |
+| `--dry-run` | 預覽模式，顯示設定與影響頁面，不實際處理 |
 
 ## 旋轉設定格式
 
@@ -199,6 +203,7 @@ ebook-crop/
 │   ├── cli.py         # 命令列介面
 │   ├── config.py      # 設定載入與解析
 │   ├── rotation.py    # 頁面旋轉
+│   ├── console.py     # 終端機輸出（彩色輸出、進度條）
 │   ├── crop.py        # 留白裁切
 │   └── utils.py       # 共用工具
 ├── input/             # 批次輸入（Git 排除）

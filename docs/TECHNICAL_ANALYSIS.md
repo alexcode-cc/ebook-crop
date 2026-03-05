@@ -21,6 +21,7 @@ ebook-crop is a PDF ebook layout optimization tool that addresses:
 | Language | Python 3.10+ |
 | PDF Processing | PyMuPDF (fitz) 1.24+ |
 | Configuration | TOML (tomli) |
+| Terminal UI | Rich 13.0+ |
 | Environment | uv |
 | Build | hatchling |
 
@@ -38,6 +39,7 @@ ebook_crop/
 ├── config.py      # load_config, parse_rotation_list, format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
 ├── crop.py        # _apply_crop, crop_pdf
+├── console.py     # Colored output, progress bar, verbosity control
 └── utils.py       # _safe_print, save_config_to_output
 ```
 
@@ -169,6 +171,10 @@ To avoid rebuilding every page with `show_pdf_page`, uses segments:
 | `-c, --config` | Config file | config.toml |
 | `-i, --input-dir` | Batch input directory | input |
 | `-d, --output-dir` | Batch output directory | output |
+| `--version` | Show current version | - |
+| `-v, --verbose` | Verbose output with detailed logs | - |
+| `-q, --quiet` | Quiet mode, suppress non-error output | - |
+| `--dry-run` | Preview settings and affected pages without processing | - |
 
 ### 4.2 Execution Modes
 
@@ -190,6 +196,7 @@ To avoid rebuilding every page with `show_pdf_page`, uses segments:
 ```
 pymupdf>=1.24.0   # PDF read/write, rotation, crop
 tomli>=2.0.0      # TOML parsing (Python 3.11+ can use stdlib tomllib)
+rich>=13.0.0      # Colored terminal output, progress bar
 ```
 
 ### 5.2 PyMuPDF Key APIs
@@ -218,6 +225,7 @@ ebook_crop/
 ├── config.py      # load_config, parse_rotation_list, format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
 ├── crop.py        # _apply_crop, crop_pdf
+├── console.py     # Colored output, progress bar, verbosity control
 └── utils.py       # _safe_print, save_config_to_output
 ```
 
@@ -225,10 +233,11 @@ ebook_crop/
 
 For detailed feature plans organized by development phase, see [ROADMAP.md](ROADMAP.md).
 
-Key directions include:
+**Phase 2 (UX Improvements) is completed** in v1.4.0, including `--version` flag, rich progress bar, verbose/quiet modes, dry-run preview, margin unit support, config validation, and colored terminal output.
+
+Key remaining directions include:
 
 - **Testing foundation**: pytest framework, unit/integration tests, CI test pipeline
-- **UX improvements**: `--version` flag, progress bar, dry-run mode, margin unit support
 - **Core enhancements**: Auto-detect margins, per-page margins, odd/even page margins, crop preview
 - **Advanced features**: Parallel batch processing, recursive directory, profile system
 - **Ecosystem**: PyPI publishing workflow, GUI frontend, Docker image
@@ -268,6 +277,7 @@ Key directions include:
 | `ebook_crop/config.py` | Config load and parse |
 | `ebook_crop/rotation.py` | Page rotation |
 | `ebook_crop/crop.py` | Margin crop |
+| `ebook_crop/console.py` | Terminal output (colored output, progress bar, verbosity) |
 | `ebook_crop/utils.py` | Shared utilities |
 | `CONTRIBUTING.md` | Commit conventions |
 | `CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
@@ -278,6 +288,6 @@ Key directions include:
 
 ## 9. Version Info
 
-- Project version: 1.3.0
+- Project version: 1.4.0
 - Python: 3.10+
 - Document updated: 2026-03-05

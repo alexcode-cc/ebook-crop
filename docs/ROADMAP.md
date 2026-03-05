@@ -27,13 +27,13 @@ Enhance CLI usability and feedback for daily use.
 
 | Item | Description | Priority |
 |------|-------------|----------|
-| `--version` flag | Display current version (`ebook_crop.__version__`) | High |
-| Progress bar | Show progress during batch processing (e.g. `rich` or `tqdm`) | Medium |
-| Verbose/quiet mode | `-v` for detailed logs, `-q` for silent mode | Medium |
-| Dry-run mode | `--dry-run` to preview settings and affected pages without processing | Medium |
-| Margin unit support | Accept `cm`, `mm`, `inch` in config (auto-convert to points) | Medium |
-| Config validation | Validate config values on load; clear error messages for invalid margins, page ranges | Medium |
-| Color output | Colored terminal output for warnings and errors | Low |
+| ✅ `--version` flag | Display current version (`ebook_crop.__version__`) | High |
+| ✅ Progress bar | Show progress during batch processing (via `rich`) | Medium |
+| ✅ Verbose/quiet mode | `-v` for detailed logs, `-q` for silent mode | Medium |
+| ✅ Dry-run mode | `--dry-run` to preview settings and affected pages without processing | Medium |
+| ✅ Margin unit support | Accept `cm`, `mm`, `in`/`inch`, `pt` in config (auto-convert to points) | Medium |
+| ✅ Config validation | Validate config values on load; clear error messages for invalid margins, page ranges | Medium |
+| ✅ Color output | Colored terminal output for warnings and errors (via `rich`) | Low |
 
 ---
 

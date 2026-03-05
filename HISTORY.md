@@ -4,6 +4,23 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-05
+
+### Added
+
+- **`--version` flag**: Display current version (`ebook_crop.__version__`)
+- **Progress bar**: Rich progress bar during batch processing
+- **Verbose/quiet mode**: `-v/--verbose` for detailed logs, `-q/--quiet` for silent mode
+- **Dry-run mode**: `--dry-run` to preview settings and affected pages without processing
+- **Margin unit support**: Config accepts `cm`, `mm`, `in`/`inch`, `pt` suffixes (e.g. `"1cm"`, `"10mm"`, `"0.5in"`, `"36pt"`) in addition to plain numbers
+- **Config validation**: Validates config values on load with clear error messages for invalid margins, page ranges
+- **Colored terminal output**: Warnings in yellow, errors in red, success in green (via `rich`)
+- **`console.py` module**: Terminal output module handling colored output, progress bar, and verbosity control
+
+### Changed
+
+- **CLI output**: Now uses `rich` for colored formatting
+
 ## [1.3.0] - 2026-03-05
 
 ### Added
@@ -77,7 +94,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0
 [1.1.1]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.1

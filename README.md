@@ -117,14 +117,14 @@ ebook-crop input.pdf -o output.pdf
 
 ## Config: config.toml
 
-Margin units: points (1 inch = 72 points)
+Margin units: points (1 inch = 72 points). Supports unit suffixes: `cm`, `mm`, `in`/`inch`, `pt` (e.g. `"1cm"`, `"10mm"`, `"0.5in"`, `"36pt"`). Plain numbers are treated as points.
 
 ```toml
 [margins]
 left = 36
 right = 36
-top = 36
-bottom = 36
+top = "1cm"
+bottom = "10mm"
 
 [pages]
 start = 2    # Start crop page, 2=skip cover
@@ -137,7 +137,7 @@ skip = 1
 angle = -1
 ```
 
-**Unit conversion**: 1 cm ≈ 28.35 pt, 0.5 inch = 36 pt
+**Unit conversion**: 1 cm ≈ 28.35 pt, 0.5 inch = 36 pt. Unit suffixes (`cm`, `mm`, `in`/`inch`, `pt`) are auto-converted to points.
 
 ## Usage
 
@@ -173,6 +173,10 @@ uv run ebook-crop -i my_input -d my_output
 | `-c, --config` | Config file path |
 | `-i, --input-dir` | Batch input directory |
 | `-d, --output-dir` | Batch output directory |
+| `--version` | Show current version |
+| `-v, --verbose` | Verbose output with detailed logs |
+| `-q, --quiet` | Quiet mode, suppress non-error output |
+| `--dry-run` | Preview settings and affected pages without processing |
 
 ## Rotation config format
 
@@ -202,6 +206,7 @@ ebook-crop/
 │   ├── config.py      # Config load and parse
 │   ├── rotation.py    # Page rotation
 │   ├── crop.py        # Margin crop
+│   ├── console.py     # Terminal output (colored output, progress bar, verbosity)
 │   └── utils.py       # Shared utilities
 ├── input/             # Batch input (gitignored)
 ├── output/            # Batch output (gitignored)

@@ -21,6 +21,7 @@ ebook-crop 是一個 PDF 電子書版面優化工具，主要解決：
 | 語言 | Python 3.10+ |
 | PDF 處理 | PyMuPDF (fitz) 1.24+ |
 | 設定檔 | TOML (tomli) |
+| 終端機輸出 | Rich 13.0+ |
 | 環境管理 | uv |
 | 建置 | hatchling |
 
@@ -37,6 +38,7 @@ ebook_crop/
 ├── cli.py         # argparse、main()
 ├── config.py      # load_config、parse_rotation_list、format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
+├── console.py     # 終端機輸出（彩色輸出、進度條、詳細/靜默模式）
 ├── crop.py        # _apply_crop、crop_pdf
 └── utils.py       # _safe_print、save_config_to_output
 ```
@@ -169,6 +171,10 @@ flowchart TD
 | `-c, --config` | 設定檔 | config.toml |
 | `-i, --input-dir` | 批次輸入目錄 | input |
 | `-d, --output-dir` | 批次輸出目錄 | output |
+| `--version` | 顯示目前版本 | - |
+| `-v, --verbose` | 詳細模式 | - |
+| `-q, --quiet` | 靜默模式 | - |
+| `--dry-run` | 預覽模式，不實際處理 | - |
 
 ### 4.2 執行模式
 
@@ -190,6 +196,7 @@ flowchart TD
 ```
 pymupdf>=1.24.0   # PDF 讀寫、旋轉、裁切
 tomli>=2.0.0      # TOML 解析（Python 3.11+ 可用 stdlib tomllib）
+rich>=13.0.0      # 終端機彩色輸出、進度條
 ```
 
 ### 5.2 PyMuPDF 關鍵 API
@@ -216,6 +223,7 @@ ebook_crop/
 ├── main.py        # 進入點
 ├── cli.py         # argparse、main()
 ├── config.py      # load_config、parse_rotation_list、format_rotation_display
+├── console.py     # 終端機輸出（彩色輸出、進度條、詳細/靜默模式）
 ├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
 ├── crop.py        # _apply_crop、crop_pdf
 └── utils.py       # _safe_print、save_config_to_output
@@ -225,10 +233,12 @@ ebook_crop/
 
 依開發階段劃分的詳細功能規劃，請見 [ROADMAP.md](ROADMAP.md)。
 
+**階段二（使用者體驗改善）已於 v1.4.0 完成**，包括 `--version` 旗標、Rich 進度條、詳細/靜默模式、預覽模式、留白單位支援、設定檔驗證與彩色輸出。
+
 主要發展方向包括：
 
 - **測試基礎**：pytest 框架、單元/整合測試、CI 測試流程
-- **體驗改善**：`--version` 旗標、進度條、預覽模式、留白單位支援
+- ~~**體驗改善**~~：已完成（v1.4.0）
 - **核心擴充**：自動偵測留白、每頁不同留白、奇偶頁留白、裁切預覽
 - **進階功能**：平行批次處理、遞迴目錄、設定檔配置系統
 - **生態系**：PyPI 發布工作流程、GUI 前端、Docker 映像
@@ -269,6 +279,7 @@ ebook_crop/
 | `ebook_crop/config.py` | 設定載入與解析 |
 | `ebook_crop/rotation.py` | 頁面旋轉 |
 | `ebook_crop/crop.py` | 留白裁切 |
+| `ebook_crop/console.py` | 終端機輸出（彩色輸出、進度條） |
 | `ebook_crop/utils.py` | 共用工具 |
 | `CONTRIBUTING.md` | Commit 規範（English） |
 | `CONTRIBUTING-CHT.md` | Commit 規範（繁體中文） |
@@ -279,6 +290,6 @@ ebook_crop/
 
 ## 9. 版本資訊
 
-- 專案版本：1.3.0
+- 專案版本：1.4.0
 - Python：3.10+
 - 文件更新：2026-03-05

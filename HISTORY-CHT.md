@@ -4,6 +4,23 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-05
+
+### 新增
+
+- **`--version` 旗標**：顯示目前版本
+- **進度條**：批次處理時顯示 Rich 進度條
+- **詳細/靜默模式**：`-v/--verbose` 與 `-q/--quiet` 旗標
+- **預覽模式**：`--dry-run` 旗標，顯示設定與影響頁面，不實際處理
+- **留白單位支援**：設定檔可使用 `"1cm"`、`"10mm"`、`"0.5in"`、`"0.5inch"`、`"36pt"`
+- **設定檔驗證**：載入時驗證設定值，對無效值顯示明確錯誤訊息
+- **彩色輸出**：警告黃色、錯誤紅色、成功綠色（透過 rich）
+- **console.py 模組**：新增終端機輸出模組，統一彩色輸出、進度條、詳細/靜默模式
+
+### 變更
+
+- **CLI 輸出**：改用 rich 彩色格式
+
 ## [1.3.0] - 2026-03-05
 
 ### 新增
@@ -77,7 +94,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0
 [1.1.1]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.1
