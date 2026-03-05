@@ -221,27 +221,23 @@ ebook_crop/
 └── utils.py       # _safe_print, save_config_to_output
 ```
 
-### 6.2 Potential New Features
+### 6.2 Feature Roadmap
 
-| Feature | Difficulty | Description |
-|---------|------------|-------------|
-| Auto-detect margins | Medium | Analyze page content boundaries, suggest crop amounts |
-| Per-page margins | Low | Extend config for per-page settings |
-| Progress bar | Low | Show progress during batch processing |
-| Single-page preview | Medium | Preview crop/rotation before applying |
-| Parallel processing | Medium | Use multiprocessing for multi-file batch |
+For detailed feature plans organized by development phase, see [ROADMAP.md](ROADMAP.md).
 
-### 6.3 Testing Suggestions
+Key directions include:
 
-- Unit tests: `parse_rotation_list`, `format_rotation_display` (config.py), `_get_rotated_page_rect` (rotation.py)
-- Integration tests: Crop, rotation, combined flow with small PDFs
-- Edge cases: Empty file, single page, very large files
+- **Testing foundation**: pytest framework, unit/integration tests, CI test pipeline
+- **UX improvements**: `--version` flag, progress bar, dry-run mode, margin unit support
+- **Core enhancements**: Auto-detect margins, per-page margins, odd/even page margins, crop preview
+- **Advanced features**: Parallel batch processing, recursive directory, profile system
+- **Ecosystem**: PyPI publishing workflow, GUI frontend, Docker image
 
-### 6.4 Performance Considerations
+### 6.3 Performance Considerations
 
 - Large files (300+ pages) with many rotated pages: `show_pdf_page` is slower
 - `garbage=1` already used for speed/size balance
-- Consider making `garbage` a config option
+- Consider making `garbage` a config option (see ROADMAP Phase 3)
 
 ---
 
@@ -274,12 +270,14 @@ ebook_crop/
 | `ebook_crop/crop.py` | Margin crop |
 | `ebook_crop/utils.py` | Shared utilities |
 | `CONTRIBUTING.md` | Commit conventions |
+| `CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
+| `CLAUDE.md` | Claude Code guidance |
 | `.gitignore` | Excludes input/, output/, config.toml, .venv, etc. |
 
 ---
 
 ## 9. Version Info
 
-- Project version: 1.2.0
+- Project version: 1.3.0
 - Python: 3.10+
 - Document updated: 2026-03-05

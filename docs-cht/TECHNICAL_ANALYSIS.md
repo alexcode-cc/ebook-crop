@@ -221,27 +221,23 @@ ebook_crop/
 └── utils.py       # _safe_print、save_config_to_output
 ```
 
-### 6.2 可考慮的新功能
+### 6.2 功能藍圖
 
-| 功能 | 難度 | 說明 |
-|------|------|------|
-| 自動偵測留白 | 中 | 分析頁面內容邊界，建議裁切量 |
-| 每頁不同 margins | 低 | 擴充 config 支援 per-page 設定 |
-| 進度條 | 低 | 批次處理時顯示進度 |
-| 單頁預覽 | 中 | 裁切/旋轉前預覽效果 |
-| 平行處理 | 中 | 多檔批次時使用 multiprocessing |
+依開發階段劃分的詳細功能規劃，請見 [ROADMAP.md](ROADMAP.md)。
 
-### 6.3 測試建議
+主要發展方向包括：
 
-- 單元測試：`parse_rotation_list`、`format_rotation_display`（config.py）、`_get_rotated_page_rect`（rotation.py）
-- 整合測試：小 PDF 的裁切、旋轉、組合流程
-- 邊界測試：空檔案、單頁、超大檔案
+- **測試基礎**：pytest 框架、單元/整合測試、CI 測試流程
+- **體驗改善**：`--version` 旗標、進度條、預覽模式、留白單位支援
+- **核心擴充**：自動偵測留白、每頁不同留白、奇偶頁留白、裁切預覽
+- **進階功能**：平行批次處理、遞迴目錄、設定檔配置系統
+- **生態系**：PyPI 發布工作流程、GUI 前端、Docker 映像
 
-### 6.4 效能考量
+### 6.3 效能考量
 
 - 大檔案（300+ 頁）旋轉多頁時，`show_pdf_page` 較耗時
 - `garbage=1` 已用於平衡速度與檔案大小
-- 可考慮 `garbage` 設為 config 選項
+- 可考慮 `garbage` 設為 config 選項（見 ROADMAP 階段三）
 
 ---
 
@@ -276,12 +272,13 @@ ebook_crop/
 | `ebook_crop/utils.py` | 共用工具 |
 | `CONTRIBUTING.md` | Commit 規範（English） |
 | `CONTRIBUTING-CHT.md` | Commit 規範（繁體中文） |
+| `CLAUDE.md` | Claude Code 輔助指引 |
 | `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
 
 ---
 
 ## 9. 版本資訊
 
-- 專案版本：1.2.0
+- 專案版本：1.3.0
 - Python：3.10+
 - 文件更新：2026-03-05
