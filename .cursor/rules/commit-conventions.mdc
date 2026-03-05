@@ -1,18 +1,18 @@
 ---
-description: Git Commit 訊息規範（Angular 格式，繁體中文）
+description: Git Commit Message Conventions (Angular format, bilingual)
 alwaysApply: true
 ---
 
-# Git Commit 規範
+# Git Commit Conventions
 
-執行 Git Commit 時，必須遵循以下規則：
+Follow these rules when making Git commits:
 
-## 規範來源
+## Reference
 
 - [AngularJS Git Commit Message Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit)
-- 詳見專案 `CONTRIBUTING.md`
+- See `CONTRIBUTING.md` (English) or `CONTRIBUTING-CHT.md` (繁體中文)
 
-## 格式
+## Format
 
 ```
 <type>(<scope>): <subject>
@@ -22,28 +22,29 @@ alwaysApply: true
 <footer>
 ```
 
-## 強制規則
+## Rules
 
-1. **語言**：所有提交訊息使用**繁體中文**
-2. **subject**：祈使句、現在式，首字不大寫，句尾無句點
-3. **每行**：不超過 100 字元
+1. **Language**: Commit messages may be written in **English** or **Traditional Chinese**
+2. **subject**: Imperative mood, present tense, no leading capital, no trailing period
+3. **Line length**: Max 100 characters per line
 
-## Type 對照
+## Type Reference
 
-| Type | 繁體中文用途 |
-|------|-------------|
-| feat | 新功能 |
-| fix | 錯誤修復 |
-| docs | 文件 |
-| style | 格式 |
-| refactor | 重構 |
-| test | 測試 |
-| chore | 建置/維護 |
+| Type | English | 繁體中文 |
+|------|---------|---------|
+| feat | New feature | 新功能 |
+| fix | Bug fix | 錯誤修復 |
+| docs | Documentation | 文件 |
+| style | Code style | 格式 |
+| refactor | Refactoring | 重構 |
+| test | Tests | 測試 |
+| chore | Build/maintenance | 建置/維護 |
 
-## 範例
+## Examples
 
 ```
+feat(pdf): add PDF margin cropping
 feat(pdf): 新增 PDF 留白裁切功能
-chore: 初始化專案結構
-fix(cli): 修正輸出檔名錯誤
+chore: initialize project structure
+fix(cli): fix output filename error
 ```
