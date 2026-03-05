@@ -47,26 +47,26 @@ ebook_crop/
 
 ```mermaid
 flowchart TD
-    subgraph Input [輸入]
-        A[config.toml]
-        B[PDF 檔案]
+    subgraph Input["輸入"]
+        A["config.toml"]
+        B["PDF 檔案"]
     end
 
-    subgraph Parse [解析]
-        C[load_config]
-        D[parse_rotation_list]
+    subgraph Parse["解析"]
+        C["load_config"]
+        D["parse_rotation_list"]
     end
 
-    subgraph Process [處理]
-        E{有旋轉?}
-        F[build_pdf_with_rotation]
-        G[_apply_crop]
-        H[doc.save]
+    subgraph Process["處理"]
+        E{"有旋轉?"}
+        F["build_pdf_with_rotation"]
+        G["apply_crop"]
+        H["doc.save"]
     end
 
-    subgraph Output [輸出]
-        I[output/*.pdf]
-        J[output/*.toml]
+    subgraph Output["輸出"]
+        I["output PDF"]
+        J["output TOML"]
     end
 
     A --> C

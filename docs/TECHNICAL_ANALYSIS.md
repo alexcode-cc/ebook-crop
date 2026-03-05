@@ -47,26 +47,26 @@ Modules are separated with clear responsibilities.
 
 ```mermaid
 flowchart TD
-    subgraph Input [Input]
-        A[config.toml]
-        B[PDF file]
+    subgraph Input["Input"]
+        A["config.toml"]
+        B["PDF file"]
     end
 
-    subgraph Parse [Parse]
-        C[load_config]
-        D[parse_rotation_list]
+    subgraph Parse["Parse"]
+        C["load_config"]
+        D["parse_rotation_list"]
     end
 
-    subgraph Process [Process]
-        E{Rotation?}
-        F[build_pdf_with_rotation]
-        G[_apply_crop]
-        H[doc.save]
+    subgraph Process["Process"]
+        E{"Rotation?"}
+        F["build_pdf_with_rotation"]
+        G["apply_crop"]
+        H["doc.save"]
     end
 
-    subgraph Output [Output]
-        I[output/*.pdf]
-        J[output/*.toml]
+    subgraph Output["Output"]
+        I["output PDF"]
+        J["output TOML"]
     end
 
     A --> C
