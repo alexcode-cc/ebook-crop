@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-05
+
+### 新增
+
+- **自動偵測留白**：`[auto_margins] enabled = true` 透過 PyMuPDF 文字/繪圖/圖片擷取分析每頁內容邊界，自動計算裁切量；啟用時 `[margins]` 棄用
+- **偏移微調**：`[auto_margins]` 的 left/right/top/bottom 偏移值，用於自動偵測後的修正調整
+- **automargin.py**：新增內容邊界偵測與自動裁切模組
+- **自動偵測測試**：test_automargin.py 共 16 個測試，總測試數 124 個
+
 ## [1.5.1] - 2026-03-05
 
 ### 修正
@@ -118,7 +127,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0

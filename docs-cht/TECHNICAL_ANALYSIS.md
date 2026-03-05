@@ -41,6 +41,7 @@ ebook_crop/
 ├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
 ├── console.py     # 終端機輸出（彩色輸出、進度條、詳細/靜默模式）
 ├── crop.py        # _apply_crop、crop_pdf
+├── automargin.py  # 自動偵測留白與裁切
 └── utils.py       # _safe_print、save_config_to_output
 ```
 
@@ -101,9 +102,10 @@ flowchart TD
 #### 3.1.1 設定檔結構
 
 ```toml
-[margins]     # 留白裁切（點，1 inch = 72 pt）
-[pages]       # 裁切頁數範圍
-[[rotation]]  # 頁面旋轉（可多筆）
+[margins]      # 留白裁切（點，1 inch = 72 pt）
+[auto_margins] # 自動偵測留白（啟用時 [margins] 棄用）
+[pages]        # 裁切頁數範圍
+[[rotation]]   # 頁面旋轉（可多筆）
 ```
 
 #### 3.1.2 載入邏輯
@@ -153,7 +155,26 @@ flowchart TD
 - 座標為未旋轉頁面空間
 - `start_page`、`end_page` 為 1-based，0 或 1 表示從封面開始
 
-### 3.4 資源管理
+### 3.4 自動偵測留白引擎 (`automargin.py`)
+
+#### 3.4.1 演算法概述
+
+透過 PyMuPDF 分析每頁內容邊界，自動計算裁切量：
+
+1. **文字邊界**：使用 `page.get_text("dict")` 擷取所有文字區塊的 bbox
+2. **繪圖邊界**：使用 `page.get_drawings()` 擷取向量繪圖的 bbox
+3. **圖片邊界**：使用 `page.get_image_info()` 擷取嵌入圖片的 bbox
+4. **合併邊界**：取所有內容元素的最小外接矩形作為內容區域
+5. **計算裁切量**：頁面邊界與內容區域的差即為可裁切留白
+6. **偏移微調**：套用 `[auto_margins]` 的 left/right/top/bottom 偏移值（正值=向內多裁、負值=向外少裁）
+
+#### 3.4.2 特殊處理
+
+- **空白頁**：無任何內容元素時自動跳過，不套用裁切
+- **每頁獨立**：每頁分別偵測，產生各自的裁切量
+- **啟用時棄用 `[margins]`**：`[auto_margins] enabled = true` 時，手動 `[margins]` 設定不生效
+
+### 3.5 資源管理
 
 - `crop.crop_pdf` 使用 `try/finally` 確保文件關閉
 - 有旋轉時：關閉 `src_doc`，保留 `new_doc` 供裁切與儲存
@@ -202,6 +223,7 @@ tests/
 ├── test_crop.py         # Crop 單元測試（11 個）
 ├── test_integration.py  # 整合測試（12 個）
 ├── test_edge_cases.py   # 邊界測試（17 個）
+├── test_automargin.py   # 自動偵測留白測試（16 個）
 └── generate_samples.py  # 樣本 PDF 生成腳本
 ```
 
@@ -224,6 +246,8 @@ tests/
 | `test_rotation.toml` | 旋轉測試設定 |
 | `test_units.toml` | 單位測試設定 |
 | `test_zero_margins.toml` | 零留白測試設定 |
+| `test_auto_margins.toml` | 自動偵測留白測試設定 |
+| `test_auto_margins_offset.toml` | 自動偵測留白偏移測試設定 |
 
 ### 5.4 覆蓋率
 
@@ -287,6 +311,7 @@ ebook_crop/
 ├── console.py     # 終端機輸出（彩色輸出、進度條、詳細/靜默模式）
 ├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
 ├── crop.py        # _apply_crop、crop_pdf
+├── automargin.py  # 自動偵測留白與裁切
 └── utils.py       # _safe_print、save_config_to_output
 ```
 
@@ -342,6 +367,7 @@ ebook_crop/
 | `ebook_crop/config.py` | 設定載入與解析 |
 | `ebook_crop/rotation.py` | 頁面旋轉 |
 | `ebook_crop/crop.py` | 留白裁切 |
+| `ebook_crop/automargin.py` | 自動偵測留白與裁切 |
 | `ebook_crop/console.py` | 終端機輸出（彩色輸出、進度條） |
 | `ebook_crop/utils.py` | 共用工具 |
 | `CONTRIBUTING.md` | Commit 規範（English） |
@@ -353,6 +379,7 @@ ebook_crop/
 | `tests/test_crop.py` | Crop 單元測試（11 個） |
 | `tests/test_integration.py` | 整合測試（12 個） |
 | `tests/test_edge_cases.py` | 邊界測試（17 個） |
+| `tests/test_automargin.py` | 自動偵測留白測試（16 個） |
 | `tests/generate_samples.py` | 樣本 PDF 生成腳本 |
 | `tests/input/` | 樣本 PDF 與測試設定檔 |
 | `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
@@ -361,6 +388,6 @@ ebook_crop/
 
 ## 10. 版本資訊
 
-- 專案版本：1.5.1
+- 專案版本：1.6.0
 - Python：3.10+
 - 文件更新：2026-03-05

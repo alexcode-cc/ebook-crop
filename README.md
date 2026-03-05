@@ -14,6 +14,7 @@ PDF ebook margin cropping tool. Removes excessive top, bottom, left, and right m
 - **Page rotation**: Fix scan angles, including arbitrary angles
 - **Page range**: Specify crop page range; optionally skip cover and back cover
 - **Batch processing**: Process multiple PDFs at once
+- **Auto-detect margins**: Automatically analyze page content boundaries and compute optimal crop margins per page
 - **Config traceability**: Preserves crop settings after processing for future reproduction
 
 ## Installation
@@ -130,6 +131,14 @@ bottom = "10mm"
 start = 2    # Start crop page, 2=skip cover
 end = 0      # 0=to last page, -1=skip back cover
 
+# Auto-detect margins (ignores [margins] when enabled)
+[auto_margins]
+enabled = true
+left = 5      # fine-tune offset (points), positive=crop more
+right = 5
+top = 0
+bottom = 0
+
 # Page rotation (scan angle correction)
 [[rotation]]
 pages = "3-0"
@@ -206,6 +215,7 @@ ebook-crop/
 │   ├── config.py      # Config load and parse
 │   ├── rotation.py    # Page rotation
 │   ├── crop.py        # Margin crop
+│   ├── automargin.py  # Auto-detect content boundaries and compute margins
 │   ├── console.py     # Terminal output (colored output, progress bar, verbosity)
 │   └── utils.py       # Shared utilities
 ├── tests/             # Test suite (pytest)
@@ -215,6 +225,7 @@ ebook-crop/
 │   ├── test_crop.py   # Crop unit tests
 │   ├── test_integration.py # Integration tests
 │   ├── test_edge_cases.py # Edge case tests
+│   ├── test_automargin.py # Auto-margin tests
 │   ├── generate_samples.py # Sample PDF generator
 │   ├── input/         # Sample PDFs and test configs
 │   └── output/        # Test output (gitignored)

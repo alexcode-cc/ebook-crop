@@ -43,7 +43,7 @@ Extend cropping and rotation capabilities.
 
 | Item | Description | Priority |
 |------|-------------|----------|
-| Auto-detect margins | Analyze page content boundaries via PyMuPDF text/drawing extraction, suggest crop amounts | High |
+| ✅ Auto-detect margins | Analyze page content boundaries via PyMuPDF text/drawing extraction, suggest crop amounts | High |
 | Per-page margins | Extend `[[margins]]` config for per-page or per-range margin overrides | Medium |
 | Odd/even page margins | Different margins for odd and even pages (common in book-style scans) | Medium |
 | Crop preview | Render a single page to image (PNG) showing crop/rotation result before full processing | Medium |

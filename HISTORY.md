@@ -4,6 +4,15 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-05
+
+### Added
+
+- **Auto-detect margins**: `[auto_margins] enabled = true` auto-detects content boundaries per page via PyMuPDF text/drawing/image extraction; `[margins]` ignored when enabled
+- **Offset fine-tuning**: `[auto_margins]` left/right/top/bottom offset values for post-detection adjustment
+- **automargin.py**: New module for content boundary detection and auto-crop
+- **Auto-margin tests**: 16 tests in `test_automargin.py`, total tests now 124
+
 ## [1.5.1] - 2026-03-05
 
 ### Fixed
@@ -118,7 +127,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0

@@ -40,6 +40,7 @@ ebook_crop/
 ├── config.py      # load_config, parse_rotation_list, format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
 ├── crop.py        # _apply_crop, crop_pdf
+├── automargin.py  # Auto-detect content boundaries, compute per-page margins
 ├── console.py     # Colored output, progress bar, verbosity control
 └── utils.py       # _safe_print, save_config_to_output
 ```
@@ -101,9 +102,10 @@ flowchart TD
 #### 3.1.1 Config Structure
 
 ```toml
-[margins]     # Margin crop (points, 1 inch = 72 pt)
-[pages]       # Crop page range
-[[rotation]]  # Page rotation (multiple entries allowed)
+[margins]       # Margin crop (points, 1 inch = 72 pt)
+[pages]         # Crop page range
+[[rotation]]    # Page rotation (multiple entries allowed)
+[auto_margins]  # Auto-detect margins (overrides [margins] when enabled)
 ```
 
 #### 3.1.2 Load Logic
@@ -153,7 +155,15 @@ To avoid rebuilding every page with `show_pdf_page`, uses segments:
 - Coordinates in unrotated page space
 - `start_page`, `end_page` are 1-based; 0 or 1 means from cover
 
-### 3.4 Resource Management
+### 3.4 Auto-Margin Detection (`automargin.py`)
+
+- Analyzes page content boundaries (text, drawings, images) via PyMuPDF extraction APIs
+- Computes per-page crop margins based on detected content bounding boxes
+- When `[auto_margins] enabled = true`, the `[margins]` section is ignored
+- Offset fine-tuning: `left/right/top/bottom` values adjust the auto-detected crop (positive = crop more inward, negative = crop less)
+- Empty pages are skipped gracefully (no content boundaries to detect)
+
+### 3.5 Resource Management
 
 - `crop.crop_pdf` uses `try/finally` to ensure document closure
 - With rotation: Close `src_doc`, keep `new_doc` for crop and save
@@ -224,6 +234,7 @@ tests/
 ├── test_crop.py         # Crop unit tests (11 tests)
 ├── test_integration.py  # Integration tests (12 tests)
 ├── test_edge_cases.py   # Edge case tests (17 tests)
+├── test_automargin.py   # Auto-margin tests (16 tests)
 ├── generate_samples.py  # Script to generate sample PDFs
 ├── input/               # Sample PDFs and test configs (committed to Git)
 │   ├── basic_5page.pdf
@@ -234,7 +245,9 @@ tests/
 │   ├── test_basic.toml
 │   ├── test_rotation.toml
 │   ├── test_units.toml
-│   └── test_zero_margins.toml
+│   ├── test_zero_margins.toml
+│   ├── test_auto_margins.toml
+│   └── test_auto_margins_offset.toml
 └── output/              # Test output directory (gitignored)
 ```
 
@@ -279,6 +292,7 @@ ebook_crop/
 ├── config.py      # load_config, parse_rotation_list, format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
 ├── crop.py        # _apply_crop, crop_pdf
+├── automargin.py  # Auto-detect content boundaries, compute per-page margins
 ├── console.py     # Colored output, progress bar, verbosity control
 └── utils.py       # _safe_print, save_config_to_output
 ```
@@ -293,7 +307,7 @@ For detailed feature plans organized by development phase, see [ROADMAP.md](ROAD
 
 Key remaining directions include:
 
-- **Core enhancements**: Auto-detect margins, per-page margins, odd/even page margins, crop preview
+- **Core enhancements**: Per-page margins, odd/even page margins, crop preview
 - **Advanced features**: Parallel batch processing, recursive directory, profile system
 - **Ecosystem**: PyPI publishing workflow, GUI frontend, Docker image
 
@@ -332,6 +346,7 @@ Key remaining directions include:
 | `ebook_crop/config.py` | Config load and parse |
 | `ebook_crop/rotation.py` | Page rotation |
 | `ebook_crop/crop.py` | Margin crop |
+| `ebook_crop/automargin.py` | Auto-detect content boundaries and compute margins |
 | `ebook_crop/console.py` | Terminal output (colored output, progress bar, verbosity) |
 | `ebook_crop/utils.py` | Shared utilities |
 | `tests/conftest.py` | Shared test fixtures |
@@ -340,6 +355,7 @@ Key remaining directions include:
 | `tests/test_crop.py` | Crop unit tests |
 | `tests/test_integration.py` | Integration tests |
 | `tests/test_edge_cases.py` | Edge case tests |
+| `tests/test_automargin.py` | Auto-margin tests |
 | `tests/generate_samples.py` | Sample PDF generator |
 | `tests/input/` | Sample PDFs and test configs |
 | `CONTRIBUTING.md` | Commit conventions |
@@ -351,6 +367,6 @@ Key remaining directions include:
 
 ## 10. Version Info
 
-- Project version: 1.5.1
+- Project version: 1.6.0
 - Python: 3.10+
 - Document updated: 2026-03-05
