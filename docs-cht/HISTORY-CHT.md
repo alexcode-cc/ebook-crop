@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-03-05
+
+### 修正
+
+- **批次模式 PDF 重複處理**：Windows 上 glob 不區分大小寫，`*.pdf` 與 `*.PDF` 匹配相同檔案導致重複處理；改用 set 去重
+
 ## [1.6.2] - 2026-03-05
 
 ### 變更
@@ -140,7 +146,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.2...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.3...HEAD
+[1.6.3]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...v1.6.0
