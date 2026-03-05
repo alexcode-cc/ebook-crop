@@ -4,7 +4,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-PDF 電子書留白裁切工具，去除大量上下左右留白，讓 PDF 中的文字顯示時不會因版面問題造成字體縮小，提升閱讀體驗。
+PDF 電子書留白裁切工具，去除大量上下左右留白，支援頁面旋轉任意角度，讓 PDF 中的文字顯示時不會因版面問題造成字體縮小，提升閱讀體驗。
 
 ## 功能特色
 

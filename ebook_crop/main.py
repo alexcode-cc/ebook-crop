@@ -1,4 +1,4 @@
-"""PDF 電子書留白裁切主程式"""
+"""PDF 電子書留白裁切主程式，支援頁面旋轉任意角度"""
 
 from __future__ import annotations
 
@@ -310,7 +310,7 @@ def crop_pdf(
 def main() -> None:
     """主程式進入點"""
     parser = argparse.ArgumentParser(
-        description="裁切 PDF 留白區域，優化電子書閱讀版面",
+        description="裁切 PDF 留白區域，支援頁面旋轉任意角度，優化電子書閱讀版面",
     )
     parser.add_argument(
         "input",

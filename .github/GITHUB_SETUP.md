@@ -7,7 +7,7 @@
 ### 一般設定
 
 1. **About**：填寫描述、網站、主題標籤
-   - Description: `PDF 電子書留白裁切工具，優化閱讀版面`
+   - Description: `PDF 電子書留白裁切工具，支援頁面旋轉任意角度，優化閱讀版面`
    - Website: `https://github.com/alexcode-cc/ebook-crop#readme`
    - Topics: `pdf`, `ebook`, `crop`, `python`, `pymupdf`
 
