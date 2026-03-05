@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-05
+
+### 新增
+
+- **功能藍圖**：新增 `docs/ROADMAP.md` 與 `docs-cht/ROADMAP.md`，包含分階段開發計畫，涵蓋測試、體驗、核心功能、進階功能與生態系
+- **CLAUDE.md**：新增 Claude Code 輔助指引檔案
+
+### 變更
+
+- **技術文件**：更新擴充建議（第 6 節）改為引用 ROADMAP，檔案清單新增相關文件
+- **文件索引**：`docs/README.md` 與 `docs-cht/README.md` 新增 ROADMAP 連結
+- **安全政策**：更新支援版本表至 1.3.x
+
 ## [1.2.0] - 2026-03-05
 
 ### 新增
@@ -64,7 +77,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0
 [1.1.1]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.1
 [1.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.0

@@ -4,6 +4,19 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-05
+
+### Added
+
+- **Feature roadmap**: `docs/ROADMAP.md` and `docs-cht/ROADMAP.md` with phased development plans covering testing, UX, core features, advanced features, and ecosystem
+- **CLAUDE.md**: Claude Code guidance file for AI-assisted development
+
+### Changed
+
+- **Technical docs**: Updated extension suggestions (section 6) to reference ROADMAP, added file list entries for new docs
+- **Documentation index**: Added ROADMAP links to `docs/README.md` and `docs-cht/README.md`
+- **Security policy**: Updated supported versions table for 1.3.x
+
 ## [1.2.0] - 2026-03-05
 
 ### Added
@@ -64,7 +77,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0
 [1.1.1]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.1
 [1.1.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.1.0
