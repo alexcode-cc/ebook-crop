@@ -1,6 +1,6 @@
 [project]
 name = "ebook-crop"
-version = "1.6.1"
+version = "1.6.2"
 description = "PDF ebook margin cropping with arbitrary-angle page rotation for optimized reading layout"
 readme = "README.md"
 license = "MIT"
