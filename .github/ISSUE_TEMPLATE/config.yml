@@ -3,3 +3,9 @@ contact_links:
   - name: 技術文件
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs/TECHNICAL_ANALYSIS.md
     about: 專案技術分析與架構說明
+  - name: 貢獻指南
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/CONTRIBUTING.md
+    about: Commit 規範與貢獻流程
+  - name: 行為準則
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/CODE_OF_CONDUCT.md
+    about: 社群行為準則

@@ -17,4 +17,4 @@
 
 - [ ] 程式碼遵循專案風格
 - [ ] 已更新相關文件
-- [ ] Commit 訊息符合 [CONTRIBUTING.md](../CONTRIBUTING.md) 規範
+- [ ] Commit 訊息符合 [CONTRIBUTING.md](CONTRIBUTING.md) 規範
