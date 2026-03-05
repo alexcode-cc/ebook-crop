@@ -60,7 +60,7 @@ def crop_pdf(
         input_path: 輸入 PDF 路徑
         output_path: 輸出 PDF 路徑
         margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
-        start_page: 開始裁切頁數（1-based），0=從第1頁，2=封面不裁切
+        start_page: 開始裁切頁數（1-based），0或1=封面也裁切，2=封面不裁切
         end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
     """
     left = margins.get("left", 0)
