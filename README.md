@@ -4,94 +4,96 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-PDF 電子書留白裁切工具，去除大量上下左右留白，支援頁面旋轉任意角度，讓 PDF 中的文字顯示時不會因版面問題造成字體縮小，提升閱讀體驗。
+PDF ebook margin cropping tool. Removes excessive top, bottom, left, and right margins, supports arbitrary-angle page rotation, and prevents font shrinking from layout issues for better reading experience.
 
-## 功能特色
+**繁體中文**：請參閱 [README-CHT.md](README-CHT.md)
 
-- **留白裁切**：可設定裁切上下左右留白區域大小
-- **頁面旋轉**：支援掃描電子書角度修正，含任意角度
-- **頁數範圍**：可指定裁切頁數範圍，封面與封底可選擇不裁切
-- **批次處理**：可一次處理多個 PDF 檔案
-- **設定追溯**：處理後保留裁切設定檔，便於日後重現
+## Features
 
-## 安裝
+- **Margin cropping**: Configure crop amounts for top, bottom, left, and right margins
+- **Page rotation**: Fix scan angles, including arbitrary angles
+- **Page range**: Specify crop page range; optionally skip cover and back cover
+- **Batch processing**: Process multiple PDFs at once
+- **Config traceability**: Preserves crop settings after processing for future reproduction
 
-### 方式一：使用 uv run（推薦，不需啟動虛擬環境）
+## Installation
+
+### Option 1: uv run (recommended, no venv activation)
 
 ```bash
-# 進入專案目錄後，直接執行（uv 會自動建立虛擬環境並安裝依賴）
+# From project directory, run directly (uv creates venv and installs deps automatically)
 uv run ebook-crop
 ```
 
-常用指令：
+Common commands:
 
 ```bash
-# 批次模式
+# Batch mode
 uv run ebook-crop
 
-# 單檔模式
+# Single-file mode
 uv run ebook-crop input.pdf -o output.pdf
 
-# 指定設定檔
+# With config file
 uv run ebook-crop input.pdf -c config.toml -o output.pdf
 ```
 
-### 方式二：使用 uv 安裝後執行
+### Option 2: Install with uv
 
 ```bash
-# 建立虛擬環境
+# Create virtual environment
 uv venv
 
-# 啟動虛擬環境（Windows PowerShell）
+# Activate (Windows PowerShell)
 .venv\Scripts\Activate.ps1
 
-# 啟動虛擬環境（Linux/macOS）
+# Activate (Linux/macOS)
 source .venv/bin/activate
 
-# 安裝
+# Install
 uv pip install -e .
 
-# 之後可直接使用 ebook-crop 指令
+# Then use ebook-crop directly
 ebook-crop
 ```
 
-### 方式三：使用 pip
+### Option 3: pip
 
 ```bash
 pip install -e .
 ```
 
-或從 PyPI 安裝（若已發布，安裝後可直接執行 `ebook-crop`）：
+Or from PyPI (if published):
 
 ```bash
 pip install ebook-crop
 ```
 
-## 快速開始
+## Quick Start
 
-1. 複製設定檔範本：
+1. Copy config template:
 
 ```bash
 cp config-sample.toml config.toml
 ```
 
-2. 依需求修改 `config.toml` 中的留白與裁切設定
+2. Edit `config.toml` for margins and crop settings
 
-3. 執行：
+3. Run:
 
 ```bash
-# 使用 uv run（推薦）
-uv run ebook-crop                    # 批次模式：將 PDF 放入 input/ 目錄後執行
-uv run ebook-crop input.pdf -o output.pdf   # 單檔模式
+# With uv run (recommended)
+uv run ebook-crop                    # Batch: put PDFs in input/ then run
+uv run ebook-crop input.pdf -o output.pdf   # Single file
 
-# 或已安裝後直接執行
+# Or if installed
 ebook-crop
 ebook-crop input.pdf -o output.pdf
 ```
 
-## 設定檔 config.toml
+## Config: config.toml
 
-留白單位：點 (points)，1 英吋 = 72 點
+Margin units: points (1 inch = 72 points)
 
 ```toml
 [margins]
@@ -101,30 +103,30 @@ top = 36
 bottom = 36
 
 [pages]
-start = 2    # 開始裁切頁數，2=封面不裁切
-end = 0      # 0=至最後一頁，-1=封底不裁切
+start = 2    # Start crop page, 2=skip cover
+end = 0      # 0=to last page, -1=skip back cover
 
-# 頁面旋轉（掃描電子書角度修正）
+# Page rotation (scan angle correction)
 [[rotation]]
 pages = "3-0"
 skip = 1
 angle = -1
 ```
 
-**留白單位換算**：1 公分 ≈ 28.35 點，0.5 英吋 = 36 點
+**Unit conversion**: 1 cm ≈ 28.35 pt, 0.5 inch = 36 pt
 
-## 使用方式
+## Usage
 
-### 批次模式
+### Batch mode
 
-不指定輸入與輸出檔案時，自動處理 `input/` 目錄內所有 PDF，以相同檔名輸出至 `output/` 目錄。
+Without input/output paths, processes all PDFs in `input/` and outputs to `output/` with same filenames.
 
 ```bash
 uv run ebook-crop
-# 或已安裝後：ebook-crop
+# Or: ebook-crop
 ```
 
-### 單檔模式
+### Single-file mode
 
 ```bash
 uv run ebook-crop input.pdf
@@ -132,73 +134,79 @@ uv run ebook-crop input.pdf -o output.pdf
 uv run ebook-crop input.pdf -c my_config.toml
 ```
 
-### 自訂目錄
+### Custom directories
 
 ```bash
 uv run ebook-crop -i my_input -d my_output
 ```
 
-### 參數說明
+### Parameters
 
-| 參數 | 說明 |
-|------|------|
-| `input` | 輸入 PDF（可省略，進入批次模式） |
-| `-o, --output` | 輸出路徑 |
-| `-c, --config` | 設定檔路徑 |
-| `-i, --input-dir` | 批次輸入目錄 |
-| `-d, --output-dir` | 批次輸出目錄 |
+| Parameter | Description |
+|-----------|-------------|
+| `input` | Input PDF (optional, enables batch mode if omitted) |
+| `-o, --output` | Output path |
+| `-c, --config` | Config file path |
+| `-i, --input-dir` | Batch input directory |
+| `-d, --output-dir` | Batch output directory |
 
-## 旋轉設定格式
+## Rotation config format
 
-| 格式 | 範例 | 說明 |
-|------|------|------|
-| 單頁 | `page = 3` | 第 3 頁 |
-| 逗號 | `pages = "1,3,5"` | 指定多頁 |
-| 範圍 | `pages = "3-9"` | 第 3 至 9 頁 |
-| 至最後 | `pages = "3-0"` | 第 3 頁至最後一頁 |
-| 全文件 | `pages = "0-0"` | 第 1 頁至最後一頁 |
-| 跳頁 | `skip = 1` | 每隔一頁（3, 5, 7, 9） |
+| Format | Example | Description |
+|--------|---------|-------------|
+| Single page | `page = 3` | Page 3 |
+| Comma-separated | `pages = "1,3,5"` | Multiple pages |
+| Range | `pages = "3-9"` | Pages 3 to 9 |
+| To last | `pages = "3-0"` | Page 3 to last |
+| Full document | `pages = "0-0"` | Page 1 to last |
+| Skip | `skip = 1` | Every other page (3, 5, 7, 9) |
 
-角度：正值=順時針、負值=逆時針
+Angles: positive=clockwise, negative=counterclockwise
 
-## 專案結構
+## Project structure
 
 ```
 ebook-crop/
-├── config-sample.toml # 設定檔範本
-├── config.toml        # 本機設定（Git 排除）
-├── docs/              # 技術文件
-├── ebook_crop/        # 主程式模組
-│   ├── __init__.py    # 版本號
-│   ├── main.py        # 進入點
-│   ├── cli.py         # 命令列介面
-│   ├── config.py      # 設定載入與解析
-│   ├── rotation.py    # 頁面旋轉
-│   ├── crop.py        # 留白裁切
-│   └── utils.py       # 共用工具
-├── input/             # 批次輸入（Git 排除）
-├── output/            # 批次輸出（Git 排除）
-├── HISTORY.md         # 變更紀錄
-├── LICENSE            # MIT 授權
-├── README.md
+├── config-sample.toml # Config template
+├── config.toml        # Local config (gitignored)
+├── docs/              # Technical docs (English)
+├── docs-cht/          # Technical docs (Traditional Chinese)
+├── ebook_crop/        # Main module
+│   ├── __init__.py    # Version
+│   ├── main.py        # Entry point
+│   ├── cli.py         # CLI
+│   ├── config.py      # Config load and parse
+│   ├── rotation.py    # Page rotation
+│   ├── crop.py        # Margin crop
+│   └── utils.py       # Shared utilities
+├── input/             # Batch input (gitignored)
+├── output/            # Batch output (gitignored)
+├── HISTORY.md         # Changelog (English)
+├── HISTORY-CHT.md     # Changelog (Traditional Chinese)
+├── LICENSE            # MIT
+├── README.md          # Project readme (English)
+├── README-CHT.md      # Project readme (Traditional Chinese)
 └── pyproject.toml
 ```
 
-## 開發
+## Development
 
-### 貢獻
+### Contributing
 
-歡迎提交 Issue 與 Pull Request。請遵循 [CONTRIBUTING.md](CONTRIBUTING.md) 中的 Commit 規範，並遵守 [行為準則](CODE_OF_CONDUCT.md)。
+Issues and Pull Requests are welcome from contributors worldwide. Please follow [CONTRIBUTING.md](CONTRIBUTING.md) for commit conventions and [Code of Conduct](CODE_OF_CONDUCT.md).
 
-### 技術文件
+- **English docs**: [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [HISTORY.md](HISTORY.md)
+- **Traditional Chinese (繁體中文)**: [README-CHT.md](README-CHT.md), [CONTRIBUTING-CHT.md](CONTRIBUTING-CHT.md), [docs-cht/](docs-cht/)
 
-詳見 [docs/TECHNICAL_ANALYSIS.md](docs/TECHNICAL_ANALYSIS.md)。
+### Technical docs
 
-## 授權
+See [docs/TECHNICAL_ANALYSIS.md](docs/TECHNICAL_ANALYSIS.md).
 
-本專案採用 [MIT License](LICENSE) 授權。
+## License
 
-## 連結
+[MIT License](LICENSE)
 
-- **儲存庫**：<https://github.com/alexcode-cc/ebook-crop>
-- **克隆**：`git clone git@github.com:alexcode-cc/ebook-crop.git`
+## Links
+
+- **Repository**: https://github.com/alexcode-cc/ebook-crop
+- **Clone**: `git clone git@github.com:alexcode-cc/ebook-crop.git`

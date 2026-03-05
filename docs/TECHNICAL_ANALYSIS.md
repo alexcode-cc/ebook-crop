@@ -1,70 +1,70 @@
-# ebook-crop 技術分析文件
+# ebook-crop Technical Analysis
 
-本文檔提供 ebook-crop 專案的深入技術分析，供後續開發參考。
-
----
-
-## 1. 專案概述
-
-### 1.1 目標與定位
-
-ebook-crop 是一個 PDF 電子書版面優化工具，主要解決：
-
-- **留白過多**：掃描或轉檔的 PDF 常有大量邊界留白，導致閱讀時字體被迫縮小
-- **頁面傾斜**：掃描電子書可能出現頁面角度不正確的問題，支援頁面旋轉任意角度修正
-- **設定追溯**：處理後保留裁切設定，便於日後重現或調整
-
-### 1.2 技術棧
-
-| 項目 | 技術 |
-|------|------|
-| 語言 | Python 3.10+ |
-| PDF 處理 | PyMuPDF (fitz) 1.24+ |
-| 設定檔 | TOML (tomli) |
-| 環境管理 | uv |
-| 建置 | hatchling |
+This document provides in-depth technical analysis of the ebook-crop project for future development reference.
 
 ---
 
-## 2. 架構設計
+## 1. Project Overview
 
-### 2.1 模組結構
+### 1.1 Goals and Positioning
+
+ebook-crop is a PDF ebook layout optimization tool that addresses:
+
+- **Excessive margins**: Scanned or converted PDFs often have large boundary margins, forcing smaller font display when reading
+- **Page tilt**: Scanned ebooks may have incorrect page angles; supports arbitrary-angle page rotation for correction
+- **Configuration traceability**: Preserves crop settings after processing for future reproduction or adjustment
+
+### 1.2 Technology Stack
+
+| Item | Technology |
+|------|------------|
+| Language | Python 3.10+ |
+| PDF Processing | PyMuPDF (fitz) 1.24+ |
+| Configuration | TOML (tomli) |
+| Environment | uv |
+| Build | hatchling |
+
+---
+
+## 2. Architecture Design
+
+### 2.1 Module Structure
 
 ```
 ebook_crop/
-├── __init__.py    # 版本號
-├── main.py        # 進入點，轉發至 cli.main
-├── cli.py         # argparse、main()
-├── config.py      # load_config、parse_rotation_list、format_rotation_display
-├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
-├── crop.py        # _apply_crop、crop_pdf
-└── utils.py       # _safe_print、save_config_to_output
+├── __init__.py    # Version
+├── main.py        # Entry point, forwards to cli.main
+├── cli.py         # argparse, main()
+├── config.py      # load_config, parse_rotation_list, format_rotation_display
+├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
+├── crop.py        # _apply_crop, crop_pdf
+└── utils.py       # _safe_print, save_config_to_output
 ```
 
-模組已拆分，各職責分離。
+Modules are separated with clear responsibilities.
 
-### 2.2 資料流
+### 2.2 Data Flow
 
 ```mermaid
 flowchart TD
-    subgraph Input [輸入]
+    subgraph Input [Input]
         A[config.toml]
-        B[PDF 檔案]
+        B[PDF file]
     end
 
-    subgraph Parse [解析]
+    subgraph Parse [Parse]
         C[load_config]
         D[parse_rotation_list]
     end
 
-    subgraph Process [處理]
-        E{有旋轉?}
+    subgraph Process [Process]
+        E{Rotation?}
         F[build_pdf_with_rotation]
         G[_apply_crop]
         H[doc.save]
     end
 
-    subgraph Output [輸出]
+    subgraph Output [Output]
         I[output/*.pdf]
         J[output/*.toml]
     end
@@ -73,214 +73,213 @@ flowchart TD
     C --> D
     B --> E
     D --> E
-    E -->|是| F
-    E -->|否| G
+    E -->|Yes| F
+    E -->|No| G
     F --> G
     G --> H
     H --> I
     C --> J
 ```
 
-### 2.3 處理順序
+### 2.3 Processing Order
 
-1. **載入設定**：讀取 config.toml
-2. **開啟 PDF**：取得總頁數（用於解析 `pages="3-0"`）
-3. **旋轉**（若有）：先執行，因裁切座標相對於未旋轉頁面
-4. **裁切**：依 margins 與 pages 設定套用 cropbox
-5. **儲存**：輸出 PDF 與對應 .toml
+1. **Load config**: Read config.toml
+2. **Open PDF**: Get total page count (for parsing `pages="3-0"`)
+3. **Rotation** (if any): Execute first, since crop coordinates are relative to unrotated pages
+4. **Crop**: Apply cropbox per margins and pages settings
+5. **Save**: Output PDF and corresponding .toml
 
 ---
 
-## 3. 核心元件分析
+## 3. Core Components
 
-### 3.1 設定系統
+### 3.1 Configuration System
 
-#### 3.1.1 設定檔結構
+#### 3.1.1 Config Structure
 
 ```toml
-[margins]     # 留白裁切（點，1 inch = 72 pt）
-[pages]       # 裁切頁數範圍
-[[rotation]]  # 頁面旋轉（可多筆）
+[margins]     # Margin crop (points, 1 inch = 72 pt)
+[pages]       # Crop page range
+[[rotation]]  # Page rotation (multiple entries allowed)
 ```
 
-#### 3.1.2 載入邏輯
+#### 3.1.2 Load Logic
 
-- `config.load_config()`：讀取 TOML，找不到時提示複製 config-sample.toml
-- 路徑：預設 `config.toml`，可透過 `-c` 指定
+- `config.load_config()`: Reads TOML, prompts to copy config-sample.toml if not found
+- Path: Default `config.toml`, overridable via `-c`
 
-#### 3.1.3 旋轉設定解析 (`parse_rotation_list`)
+#### 3.1.3 Rotation Config Parsing (`parse_rotation_list`)
 
-| 格式 | 範例 | 說明 |
-|------|------|------|
-| 單頁 | `page = 3` | 第 3 頁 |
-| 逗號 | `pages = "1,3,5"` | 指定多頁 |
-| 陣列 | `pages = [1, 3, 5]` | 同上 |
-| 範圍 | `pages = "3-9"` | 第 3 至 9 頁 |
-| 至最後 | `pages = "3-0"` | 第 3 頁至最後一頁（需 total_pages） |
-| 全文件 | `pages = "0-0"` | 第 1 頁至最後一頁 |
-| 跳頁 | `skip = 1` | 每隔 1 頁（3, 5, 7, 9） |
+| Format | Example | Description |
+|--------|---------|-------------|
+| Single page | `page = 3` | Page 3 |
+| Comma-separated | `pages = "1,3,5"` | Multiple pages |
+| Array | `pages = [1, 3, 5]` | Same as above |
+| Range | `pages = "3-9"` | Pages 3 to 9 |
+| To last | `pages = "3-0"` | Page 3 to last (requires total_pages) |
+| Full document | `pages = "0-0"` | Page 1 to last |
+| Skip | `skip = 1` | Every other page (3, 5, 7, 9) |
 
-**重要**：`pages="3-0"` 需在開啟 PDF 後才能解析，因需 `total_pages`。
+**Note**: `pages="3-0"` requires PDF to be opened first for `total_pages`.
 
-### 3.2 旋轉引擎 (`rotation.build_pdf_with_rotation`)
+### 3.2 Rotation Engine (`rotation.build_pdf_with_rotation`)
 
-#### 3.2.1 策略：分段處理
+#### 3.2.1 Strategy: Segmented Processing
 
-為避免每頁都用 `show_pdf_page` 重建，採用分段：
+To avoid rebuilding every page with `show_pdf_page`, uses segments:
 
-1. **第一個旋轉頁之前**：`insert_pdf` 批次複製
-2. **旋轉頁**：`show_pdf_page` 重建（支援任意角度）
-3. **旋轉頁之間**：`insert_pdf` 複製
-4. **最後旋轉頁之後**：`insert_pdf` 複製
+1. **Before first rotated page**: `insert_pdf` batch copy
+2. **Rotated pages**: `show_pdf_page` rebuild (supports arbitrary angles)
+3. **Between rotated pages**: `insert_pdf` copy
+4. **After last rotated page**: `insert_pdf` copy
 
-#### 3.2.2 PyMuPDF API 使用
+#### 3.2.2 PyMuPDF API Usage
 
-- `show_pdf_page(rect, docsrc, pno, rotate=angle)`：任意角度旋轉
-- `insert_pdf(docsrc, from_page, to_page)`：複製頁面範圍
-- 旋轉方向：使用者 正值=順時針，程式內對 PyMuPDF 傳 `-angle`
+- `show_pdf_page(rect, docsrc, pno, rotate=angle)`: Arbitrary angle rotation
+- `insert_pdf(docsrc, from_page, to_page)`: Copy page range
+- Rotation direction: User positive=clockwise, internally passes `-angle` to PyMuPDF
 
-#### 3.2.3 頁面尺寸
+#### 3.2.3 Page Dimensions
 
-- 90°、270°：寬高對調 (`_get_rotated_page_rect`)
-- 其他角度：沿用來源尺寸，`keep_proportion=True` 置中縮放
+- 90°, 270°: Width/height swapped (`_get_rotated_page_rect`)
+- Other angles: Keep source dimensions, `keep_proportion=True` for centered scaling
 
-### 3.3 裁切引擎 (`_apply_crop`)
+### 3.3 Crop Engine (`_apply_crop`)
 
-- 使用 `page.set_cropbox(rect)` 設定可見區域
-- 座標為未旋轉頁面空間
-- `start_page`、`end_page` 為 1-based，0 或 1 表示從封面開始
+- Uses `page.set_cropbox(rect)` to set visible area
+- Coordinates in unrotated page space
+- `start_page`, `end_page` are 1-based; 0 or 1 means from cover
 
-### 3.4 資源管理
+### 3.4 Resource Management
 
-- `crop.crop_pdf` 使用 `try/finally` 確保文件關閉
-- 有旋轉時：關閉 `src_doc`，保留 `new_doc` 供裁切與儲存
-- `doc.save(..., garbage=1, deflate=True)`：garbage=1 平衡速度與檔案大小
+- `crop.crop_pdf` uses `try/finally` to ensure document closure
+- With rotation: Close `src_doc`, keep `new_doc` for crop and save
+- `doc.save(..., garbage=1, deflate=True)`: garbage=1 balances speed and file size
 
 ---
 
-## 4. CLI 介面
+## 4. CLI Interface
 
-### 4.1 參數
+### 4.1 Parameters
 
-| 參數 | 說明 | 預設 |
-|------|------|------|
-| `input` | 輸入 PDF（可省略） | - |
-| `-o, --output` | 輸出路徑 | 輸入檔名_cropped.pdf |
-| `-c, --config` | 設定檔 | config.toml |
-| `-i, --input-dir` | 批次輸入目錄 | input |
-| `-d, --output-dir` | 批次輸出目錄 | output |
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `input` | Input PDF (optional) | - |
+| `-o, --output` | Output path | input_cropped.pdf |
+| `-c, --config` | Config file | config.toml |
+| `-i, --input-dir` | Batch input directory | input |
+| `-d, --output-dir` | Batch output directory | output |
 
-### 4.2 執行模式
+### 4.2 Execution Modes
 
-- **批次模式**：無 input 與 output 時，處理 `input/` 內所有 PDF
-- **單檔模式**：指定 input，可選 output
+- **Batch mode**: No input/output specified, processes all PDFs in `input/`
+- **Single-file mode**: Specify input, optional output
 
-### 4.3 輸出行為
+### 4.3 Output Behavior
 
-- 每份 PDF 處理後，將使用的 config 複製為 `檔名.toml` 至輸出目錄（`utils.save_config_to_output`）
-- `utils._safe_print` 處理 Windows 主控台 Unicode 編碼問題
-- `sys.stdout.flush()` 確保「完成！」即時顯示
-
----
-
-## 5. 依賴關係
-
-### 5.1 直接依賴
-
-```
-pymupdf>=1.24.0   # PDF 讀寫、旋轉、裁切
-tomli>=2.0.0      # TOML 解析（Python 3.11+ 可用 stdlib tomllib）
-```
-
-### 5.2 PyMuPDF 關鍵 API
-
-| 用途 | API |
-|------|-----|
-| 開啟/儲存 | `fitz.open()`, `doc.save()` |
-| 裁切 | `page.set_cropbox(rect)` |
-| 旋轉（任意角度） | `page.show_pdf_page(rect, src, pno, rotate=angle)` |
-| 複製頁面 | `doc.insert_pdf(src, from_page, to_page)` |
-| 頁面尺寸 | `page.rect`, `fitz.Rect()` |
+- After each PDF, copies used config as `filename.toml` to output directory (`utils.save_config_to_output`)
+- `utils._safe_print` handles Windows console Unicode encoding
+- `sys.stdout.flush()` ensures "Done!" displays immediately
 
 ---
 
-## 6. 擴充與改進建議
+## 5. Dependencies
 
-### 6.1 模組化重構
+### 5.1 Direct Dependencies
 
-已完成拆分，結構如下：
+```
+pymupdf>=1.24.0   # PDF read/write, rotation, crop
+tomli>=2.0.0      # TOML parsing (Python 3.11+ can use stdlib tomllib)
+```
+
+### 5.2 PyMuPDF Key APIs
+
+| Purpose | API |
+|---------|-----|
+| Open/Save | `fitz.open()`, `doc.save()` |
+| Crop | `page.set_cropbox(rect)` |
+| Rotation (arbitrary) | `page.show_pdf_page(rect, src, pno, rotate=angle)` |
+| Copy pages | `doc.insert_pdf(src, from_page, to_page)` |
+| Page dimensions | `page.rect`, `fitz.Rect()` |
+
+---
+
+## 6. Extension and Improvement Suggestions
+
+### 6.1 Modular Refactoring
+
+Completed; structure:
 
 ```
 ebook_crop/
 ├── __init__.py
-├── main.py        # 進入點
-├── cli.py         # argparse、main()
-├── config.py      # load_config、parse_rotation_list、format_rotation_display
-├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
-├── crop.py        # _apply_crop、crop_pdf
-└── utils.py       # _safe_print、save_config_to_output
+├── main.py        # Entry point
+├── cli.py         # argparse, main()
+├── config.py      # load_config, parse_rotation_list, format_rotation_display
+├── rotation.py    # build_pdf_with_rotation, _get_rotated_page_rect
+├── crop.py        # _apply_crop, crop_pdf
+└── utils.py       # _safe_print, save_config_to_output
 ```
 
-### 6.2 可考慮的新功能
+### 6.2 Potential New Features
 
-| 功能 | 難度 | 說明 |
-|------|------|------|
-| 自動偵測留白 | 中 | 分析頁面內容邊界，建議裁切量 |
-| 每頁不同 margins | 低 | 擴充 config 支援 per-page 設定 |
-| 進度條 | 低 | 批次處理時顯示進度 |
-| 單頁預覽 | 中 | 裁切/旋轉前預覽效果 |
-| 平行處理 | 中 | 多檔批次時使用 multiprocessing |
+| Feature | Difficulty | Description |
+|---------|------------|-------------|
+| Auto-detect margins | Medium | Analyze page content boundaries, suggest crop amounts |
+| Per-page margins | Low | Extend config for per-page settings |
+| Progress bar | Low | Show progress during batch processing |
+| Single-page preview | Medium | Preview crop/rotation before applying |
+| Parallel processing | Medium | Use multiprocessing for multi-file batch |
 
-### 6.3 測試建議
+### 6.3 Testing Suggestions
 
-- 單元測試：`parse_rotation_list`、`format_rotation_display`（config.py）、`_get_rotated_page_rect`（rotation.py）
-- 整合測試：小 PDF 的裁切、旋轉、組合流程
-- 邊界測試：空檔案、單頁、超大檔案
+- Unit tests: `parse_rotation_list`, `format_rotation_display` (config.py), `_get_rotated_page_rect` (rotation.py)
+- Integration tests: Crop, rotation, combined flow with small PDFs
+- Edge cases: Empty file, single page, very large files
 
-### 6.4 效能考量
+### 6.4 Performance Considerations
 
-- 大檔案（300+ 頁）旋轉多頁時，`show_pdf_page` 較耗時
-- `garbage=1` 已用於平衡速度與檔案大小
-- 可考慮 `garbage` 設為 config 選項
+- Large files (300+ pages) with many rotated pages: `show_pdf_page` is slower
+- `garbage=1` already used for speed/size balance
+- Consider making `garbage` a config option
 
 ---
 
-## 7. 開發規範
+## 7. Development Conventions
 
 ### 7.1 Git Commit
 
-- 規範：AngularJS Git Commit Message Conventions
-- 語言：繁體中文
-- 詳見：`CONTRIBUTING.md`、`.cursor/rules/commit-conventions.mdc`
+- Convention: AngularJS Git Commit Message Conventions
+- See: `CONTRIBUTING.md`, `.cursor/rules/commit-conventions.mdc`
 
-### 7.2 專案慣例
+### 7.2 Project Conventions
 
-- 頁碼：對外（config、顯示）為 1-based，內部為 0-based
-- 角度：正值=順時針、負值=逆時針
-- 單位：留白使用 PDF 點（points），1 inch = 72 pt
-
----
-
-## 8. 檔案清單
-
-| 路徑 | 說明 |
-|------|------|
-| `pyproject.toml` | 專案設定、依賴、entry point |
-| `config-sample.toml` | 設定範本 |
-| `ebook_crop/__init__.py` | 版本號 |
-| `ebook_crop/main.py` | 進入點 |
-| `ebook_crop/cli.py` | 命令列介面 |
-| `ebook_crop/config.py` | 設定載入與解析 |
-| `ebook_crop/rotation.py` | 頁面旋轉 |
-| `ebook_crop/crop.py` | 留白裁切 |
-| `ebook_crop/utils.py` | 共用工具 |
-| `CONTRIBUTING.md` | Commit 規範 |
-| `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
+- Page numbers: External (config, display) 1-based, internal 0-based
+- Angles: Positive=clockwise, negative=counterclockwise
+- Units: Margins in PDF points, 1 inch = 72 pt
 
 ---
 
-## 9. 版本資訊
+## 8. File List
 
-- 專案版本：1.1.1
-- Python：3.10+
-- 文件更新：2026-03-05
+| Path | Description |
+|------|-------------|
+| `pyproject.toml` | Project config, dependencies, entry point |
+| `config-sample.toml` | Config template |
+| `ebook_crop/__init__.py` | Version |
+| `ebook_crop/main.py` | Entry point |
+| `ebook_crop/cli.py` | CLI |
+| `ebook_crop/config.py` | Config load and parse |
+| `ebook_crop/rotation.py` | Page rotation |
+| `ebook_crop/crop.py` | Margin crop |
+| `ebook_crop/utils.py` | Shared utilities |
+| `CONTRIBUTING.md` | Commit conventions |
+| `.gitignore` | Excludes input/, output/, config.toml, .venv, etc. |
+
+---
+
+## 9. Version Info
+
+- Project version: 1.2.0
+- Python: 3.10+
+- Document updated: 2026-03-05

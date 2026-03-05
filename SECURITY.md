@@ -1,15 +1,16 @@
-# 安全政策
+# Security Policy
 
-## 支援版本
+## Supported Versions
 
-| 版本 | 支援狀態     |
-|------|--------------|
-| 1.1.x | 目前支援     |
-| 1.0.x | 支援         |
-| < 1.0 | 不支援       |
+| Version | Supported          |
+|---------|--------------------|
+| 1.2.x   | Yes (current)      |
+| 1.1.x   | Yes                |
+| 1.0.x   | Yes                |
+| < 1.0   | No                 |
 
-## 回報漏洞
+## Reporting Vulnerabilities
 
-若發現安全漏洞，請透過 [GitHub Issues](https://github.com/alexcode-cc/ebook-crop/issues) 回報，並在標題註明 `[Security]`。
+If you discover a security vulnerability, please report it via [GitHub Issues](https://github.com/alexcode-cc/ebook-crop/issues) with `[Security]` in the title.
 
-請勿公開揭露未修復的漏洞。
+Do not disclose unremediated vulnerabilities publicly.

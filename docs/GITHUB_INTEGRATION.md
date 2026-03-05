@@ -1,176 +1,176 @@
-# GitHub 整合執行流程
+# GitHub Integration Workflow
 
-本文件說明如何將 ebook-crop 專案與 GitHub 整合，並讓 CI 工作流程與 README 徽章正常運作。
-
----
-
-## 1. 前置需求
-
-- [Git](https://git-scm.com/) 已安裝
-- [GitHub 帳號](https://github.com/)
-- 本機專案已初始化 Git（`git init`）
-- SSH 金鑰已設定並加入 GitHub（若使用 SSH 克隆）
+This document explains how to integrate the ebook-crop project with GitHub and ensure CI workflows and README badges work correctly.
 
 ---
 
-## 2. 建立 GitHub 儲存庫
+## 1. Prerequisites
 
-### 2.1 建立新儲存庫
-
-1. 登入 GitHub，點擊右上角 **+** → **New repository**
-2. 填寫：
-   - **Repository name**：`ebook-crop`
-   - **Description**：`PDF 電子書留白裁切工具，支援頁面旋轉任意角度，優化閱讀版面`
-   - **Visibility**：Public（若為私有，CI 徽章可能無法顯示）
-   - **不要**勾選「Add a README file」（本機已有）
-3. 點擊 **Create repository**
-
-### 2.2 取得儲存庫 URL
-
-- **SSH**：`git@github.com:alexcode-cc/ebook-crop.git`
-- **HTTPS**：`https://github.com/alexcode-cc/ebook-crop.git`
+- [Git](https://git-scm.com/) installed
+- [GitHub account](https://github.com/)
+- Local project initialized with Git (`git init`)
+- SSH key configured and added to GitHub (if using SSH clone)
 
 ---
 
-## 3. 設定遠端與推送
+## 2. Create GitHub Repository
 
-### 3.1 檢查遠端設定
+### 2.1 Create New Repository
+
+1. Log in to GitHub, click **+** → **New repository**
+2. Fill in:
+   - **Repository name**: `ebook-crop`
+   - **Description**: `PDF ebook margin cropping tool with page rotation support for optimized reading layout`
+   - **Visibility**: Public (private repos may not display CI badges correctly)
+   - **Do not** check "Add a README file" (local project already has one)
+3. Click **Create repository**
+
+### 2.2 Get Repository URL
+
+- **SSH**: `git@github.com:alexcode-cc/ebook-crop.git`
+- **HTTPS**: `https://github.com/alexcode-cc/ebook-crop.git`
+
+---
+
+## 3. Configure Remote and Push
+
+### 3.1 Check Remote Configuration
 
 ```bash
 git remote -v
 ```
 
-若尚未設定 `origin`，執行：
+If `origin` is not set:
 
 ```bash
 git remote add origin git@github.com:alexcode-cc/ebook-crop.git
 ```
 
-若需修改遠端 URL：
+To change remote URL:
 
 ```bash
 git remote set-url origin git@github.com:alexcode-cc/ebook-crop.git
 ```
 
-### 3.2 推送至 GitHub
+### 3.2 Push to GitHub
 
 ```bash
-# 確認目前分支
+# Verify current branch
 git branch
 
-# 推送 main 分支
+# Push main branch
 git push -u origin main
 ```
 
-首次推送時，若遠端為空儲存庫，Git 會上傳所有 commit 與檔案。
+On first push, if the remote is an empty repository, Git will upload all commits and files.
 
 ---
 
-## 4. CI 工作流程執行
+## 4. CI Workflow Execution
 
-### 4.1 觸發時機
+### 4.1 Trigger Conditions
 
-推送成功後，GitHub Actions 會自動觸發 CI 工作流程。本專案 CI 於以下情況執行：
+After a successful push, GitHub Actions automatically triggers the CI workflow. This project's CI runs on:
 
-| 觸發條件 | 說明 |
-|----------|------|
-| `push` 至 `main` 或 `develop` | 每次推送時執行 |
-| `pull_request` 至 `main` 或 `develop` | 建立或更新 PR 時執行 |
+| Trigger | Description |
+|---------|-------------|
+| `push` to `main` or `develop` | Runs on every push |
+| `pull_request` to `main` or `develop` | Runs when creating or updating a PR |
 
-### 4.2 工作流程內容
+### 4.2 Workflow Contents
 
-CI 包含兩個 job：
+CI includes two jobs:
 
-1. **Lint**：使用 Ruff 檢查程式碼風格
-2. **Build & Verify**：在 Python 3.10、3.11、3.12 上安裝套件並驗證 CLI
+1. **Lint**: Ruff checks code style
+2. **Build & Verify**: Installs package and verifies CLI on Python 3.10, 3.11, 3.12
 
-### 4.3 查看執行結果
+### 4.3 View Execution Results
 
-1. 開啟儲存庫頁面：`https://github.com/alexcode-cc/ebook-crop`
-2. 點擊上方 **Actions** 分頁
-3. 點選最新的 **CI** 工作流程執行
-4. 可查看各 job 的日誌與狀態
+1. Open repository: `https://github.com/alexcode-cc/ebook-crop`
+2. Click **Actions** tab
+3. Select the latest **CI** workflow run
+4. View logs and status for each job
 
-### 4.4 徽章顯示條件
+### 4.4 Badge Display Requirements
 
-README 中的 CI 徽章需滿足以下條件才會正確顯示：
+README CI badge requires these conditions to display correctly:
 
-| 條件 | 說明 |
-|------|------|
-| 儲存庫已推送 | 程式碼已存在於 GitHub |
-| 工作流程已執行 | 至少有一次 CI 執行紀錄 |
-| 儲存庫為公開 | 私有儲存庫可能無法透過 shields.io 取得狀態 |
-| 工作流程檔存在 | `.github/workflows/ci.yml` 已提交並推送 |
+| Condition | Description |
+|-----------|-------------|
+| Repository pushed | Code exists on GitHub |
+| Workflow executed | At least one CI run recorded |
+| Repository public | Private repos may not expose status via shields.io |
+| Workflow file exists | `.github/workflows/ci.yml` committed and pushed |
 
-**重要**：首次推送後，請等待 1–2 分鐘讓 CI 完成執行，徽章才會顯示正確狀態（通過 / 失敗）。
+**Important**: After first push, wait 1–2 minutes for CI to complete before the badge shows correct status (passing/failing).
 
 ---
 
-## 5. 完整執行流程總覽
+## 5. Complete Workflow Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  1. 本機準備                                                      │
-│     • git add / git commit 完成變更                               │
-│     • git remote 已指向 GitHub 儲存庫                             │
+│  1. Local Preparation                                             │
+│     • git add / git commit changes                                │
+│     • git remote points to GitHub repository                      │
 └───────────────────────────────┬─────────────────────────────────┘
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  2. 推送                                                          │
+│  2. Push                                                          │
 │     • git push -u origin main                                    │
 └───────────────────────────────┬─────────────────────────────────┘
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  3. GitHub 接收                                                   │
-│     • 儲存庫更新                                                  │
-│     • 偵測到 .github/workflows/ci.yml                            │
+│  3. GitHub Receives                                               │
+│     • Repository updated                                          │
+│     • Detects .github/workflows/ci.yml                           │
 └───────────────────────────────┬─────────────────────────────────┘
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  4. Actions 觸發                                                  │
-│     • 建立 CI 工作流程執行                                        │
-│     • 排隊等候 runner                                             │
+│  4. Actions Trigger                                               │
+│     • Creates CI workflow run                                    │
+│     • Queues for runner                                          │
 └───────────────────────────────┬─────────────────────────────────┘
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  5. CI 執行                                                       │
-│     • Lint job：Ruff 檢查                                        │
-│     • Build job：Python 3.10/3.11/3.12 建置驗證                   │
+│  5. CI Execution                                                  │
+│     • Lint job: Ruff check                                       │
+│     • Build job: Python 3.10/3.11/3.12 build verification        │
 └───────────────────────────────┬─────────────────────────────────┘
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  6. 結果                                                          │
-│     • 徽章更新（passing / failing）                               │
-│     • PR 顯示 CI 狀態                                             │
-│     • 可設定分支保護：需 CI 通過才能合併                           │
+│  6. Results                                                       │
+│     • Badge updates (passing/failing)                             │
+│     • PR shows CI status                                          │
+│     • Branch protection: CI must pass to merge                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 6. 疑難排解
+## 6. Troubleshooting
 
-### 徽章顯示為破圖或「no status」
+### Badge shows broken image or "no status"
 
-- **原因**：工作流程尚未執行、儲存庫為私有，或 shields.io 無法連線
-- **處理**：
-  1. 確認已執行 `git push origin main`
-  2. 至 Actions 分頁確認 CI 是否已執行
-  3. 若為私有儲存庫，可考慮改為公開，或移除 CI 徽章
+- **Cause**: Workflow not yet run, private repository, or shields.io unreachable
+- **Fix**:
+  1. Confirm `git push origin main` executed
+  2. Check Actions tab for CI run
+  3. For private repos, consider making public or removing CI badge
 
-### CI 執行失敗
+### CI execution fails
 
-- **Lint 失敗**：執行 `uv run ruff check .`  locally 修正
-- **Build 失敗**：確認 `uv pip install -e .` 與 `ebook-crop --help` 在本機可正常執行
+- **Lint failure**: Run `uv run ruff check .` locally to fix
+- **Build failure**: Verify `uv pip install -e .` and `ebook-crop --help` work locally
 
-### 推送被拒絕（rejected）
+### Push rejected
 
-- **原因**：遠端有本機沒有的 commit（例如在 GitHub 網頁新增了 README）
-- **處理**：先 `git pull origin main --rebase`，再 `git push origin main`
+- **Cause**: Remote has commits not in local (e.g., README added on GitHub)
+- **Fix**: Run `git pull origin main --rebase`, then `git push origin main`
 
 ---
 
-## 7. 相關文件
+## 7. Related Documentation
 
-- [GitHub 儲存庫設定指南](../.github/GITHUB_SETUP.md) — 進階儲存庫設定
-- [技術分析](TECHNICAL_ANALYSIS.md) — 專案架構與技術說明
+- [GitHub Repository Setup Guide](../.github/GITHUB_SETUP.md) — Advanced repository configuration
+- [Technical Analysis](TECHNICAL_ANALYSIS.md) — Project architecture and technical details

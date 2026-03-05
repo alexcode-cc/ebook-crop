@@ -1,10 +1,15 @@
-# 貢獻指南
+# Contributing Guide
 
-## Git Commit 訊息規範
+Contributions from developers worldwide are welcome. This project supports both English and Traditional Chinese documentation.
 
-本專案採用 [AngularJS Git Commit Message Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit) 規範，**所有提交訊息請使用繁體中文**。
+- **English** (this file)
+- **繁體中文**: [CONTRIBUTING-CHT.md](CONTRIBUTING-CHT.md)
 
-### 格式
+## Git Commit Message Conventions
+
+This project follows [AngularJS Git Commit Message Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit).
+
+### Format
 
 ```
 <type>(<scope>): <subject>
@@ -14,53 +19,53 @@
 <footer>
 ```
 
-### 規則
+### Rules
 
-- **每行不超過 100 字元**
-- **subject**：使用祈使句、現在式（如「新增」而非「新增了」），首字不大寫，句尾不加句點
-- **body**：說明變更內容與原因（非做法），使用祈使句
-- **footer**：可選，用於重大變更或關聯 issue
+- **Max 100 characters per line**
+- **subject**: Imperative mood, present tense (e.g. "add" not "added"), no leading capital, no trailing period
+- **body**: Describe what and why (not how), imperative mood
+- **footer**: Optional, for breaking changes or issue references
 
-### Type 類型
+### Type
 
-| Type | 說明 |
-|------|------|
-| feat | 新功能 |
-| fix | 錯誤修復 |
-| docs | 文件變更 |
-| style | 程式碼格式（不影響邏輯，如縮排、分號） |
-| refactor | 重構 |
-| test | 測試相關 |
-| chore | 建置、工具、維護 |
+| Type | Description |
+|------|-------------|
+| feat | New feature |
+| fix | Bug fix |
+| docs | Documentation |
+| style | Code style (no logic change, e.g. indentation, semicolons) |
+| refactor | Refactoring |
+| test | Tests |
+| chore | Build, tooling, maintenance |
 
-### Scope 範圍（可選）
+### Scope (optional)
 
-指定變更的模組或區域，例如：`cli`、`config`、`crop`、`rotation`、`utils`。
+Module or area, e.g. `cli`, `config`, `crop`, `rotation`, `utils`.
 
-### 範例
-
-```
-feat(pdf): 新增 PDF 留白裁切功能
-
-實作 config.toml 設定檔讀取與 PyMuPDF 裁切邏輯，
-支援自訂上下左右留白裁切量。
-```
+### Examples
 
 ```
-fix(cli): 修正輸出檔名預設值錯誤
+feat(pdf): add PDF margin cropping
 
-當輸入路徑不含副檔名時，輸出檔名會錯誤附加 _cropped，
-改為正確處理 stem 與 suffix。
+Implement config.toml loading and PyMuPDF crop logic,
+support custom top/bottom/left/right margin crop amounts.
 ```
 
 ```
-docs: 更新 README 安裝說明
+fix(cli): fix default output filename
 
-補充 uv 虛擬環境建立步驟與 Windows PowerShell 啟動指令。
+When input path has no extension, output filename incorrectly
+appended _cropped. Fix stem and suffix handling.
 ```
 
 ```
-chore: 初始化專案結構
+docs: update README installation
 
-建立 pyproject.toml、config.toml 與 ebook_crop 模組。
+Add uv venv setup and Windows PowerShell activation commands.
+```
+
+```
+chore: initialize project structure
+
+Add pyproject.toml, config.toml, and ebook_crop module.
 ```
