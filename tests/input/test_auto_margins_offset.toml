@@ -1,0 +1,10 @@
+[auto_margins]
+enabled = true
+left = 5
+right = 5
+top = 5
+bottom = 5
+
+[pages]
+start = 1
+end = 0

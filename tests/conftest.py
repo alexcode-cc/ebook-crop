@@ -74,6 +74,16 @@ def zero_margins_config_path() -> Path:
 
 
 @pytest.fixture
+def auto_margins_config_path() -> Path:
+    return SAMPLE_DIR / "test_auto_margins.toml"
+
+
+@pytest.fixture
+def auto_margins_offset_config_path() -> Path:
+    return SAMPLE_DIR / "test_auto_margins_offset.toml"
+
+
+@pytest.fixture
 def tmp_pdf(tmp_path: Path) -> Path:
     """建立臨時 PDF 用於測試"""
     pdf_path = tmp_path / "temp.pdf"
