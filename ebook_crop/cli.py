@@ -91,8 +91,16 @@ def main() -> None:
     start_page = int(pages_config.get("start", 2))
     end_page = int(pages_config.get("end", 0))
     rotation_list = cfg.get("rotation", [])
+    auto_margins = cfg.get("_auto_margins")
 
-    con.info(f"留白設定：{config.format_margins_display(margins)}")
+    if auto_margins is not None:
+        offsets = auto_margins.get("offsets", {})
+        con.info("留白模式：[bold]自動偵測[/bold]")
+        if any(v != 0 for v in offsets.values()):
+            con.info(f"偏移微調：{config.format_margins_display(offsets)}")
+    else:
+        con.info(f"留白設定：{config.format_margins_display(margins)}")
+
     con.info(f"頁數範圍：從第 {start_page} 頁開始，"
              f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
     if rotation_list:
@@ -101,13 +109,13 @@ def main() -> None:
     con.verbose(f"設定檔：{args.config.resolve()}")
 
     if args.dry_run:
-        _dry_run(con, args, margins, start_page, end_page, rotation_list)
+        _dry_run(con, args, margins, start_page, end_page, rotation_list, auto_margins)
         return
 
     if args.input is None and args.output is None:
-        _batch_mode(con, args, margins, start_page, end_page, rotation_list)
+        _batch_mode(con, args, margins, start_page, end_page, rotation_list, auto_margins)
     else:
-        _single_mode(con, args, margins, start_page, end_page, rotation_list)
+        _single_mode(con, args, margins, start_page, end_page, rotation_list, auto_margins)
 
 
 def _dry_run(
@@ -117,6 +125,7 @@ def _dry_run(
     start_page: int,
     end_page: int,
     rotation_list: list,
+    auto_margins: dict | None = None,
 ) -> None:
     """預覽模式：顯示設定與影響頁面，不實際處理"""
     import fitz
@@ -202,6 +211,7 @@ def _batch_mode(
     start_page: int,
     end_page: int,
     rotation_list: list,
+    auto_margins: dict | None = None,
 ) -> None:
     """批次模式：處理 input/ 目錄內所有 PDF"""
     input_dir = args.input_dir.resolve()
@@ -224,7 +234,8 @@ def _batch_mode(
         for input_path in pdf_files:
             output_path = output_dir / input_path.name
             con.verbose(f"裁切中：{input_path.name} -> {output_path}")
-            crop.crop_pdf(input_path, output_path, margins, start_page, end_page, rotation_list)
+            crop.crop_pdf(input_path, output_path, margins, start_page, end_page,
+                          rotation_list, auto_margins)
             utils.save_config_to_output(args.config.resolve(), output_path)
             tracker.advance()
 
@@ -238,6 +249,7 @@ def _single_mode(
     start_page: int,
     end_page: int,
     rotation_list: list,
+    auto_margins: dict | None = None,
 ) -> None:
     """單檔模式"""
     if args.input is None:
@@ -256,6 +268,7 @@ def _single_mode(
         output_path = output_path.with_suffix(".pdf")
 
     con.safe_print(f"裁切中：{args.input} -> {output_path}")
-    crop.crop_pdf(args.input, output_path, margins, start_page, end_page, rotation_list)
+    crop.crop_pdf(args.input, output_path, margins, start_page, end_page,
+                  rotation_list, auto_margins)
     utils.save_config_to_output(args.config.resolve(), output_path)
     con.success("完成！")

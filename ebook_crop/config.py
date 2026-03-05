@@ -139,6 +139,16 @@ def load_config(config_path: Path) -> dict:
     if "margins" in cfg:
         cfg["margins"] = _convert_margins(cfg["margins"])
 
+    # 處理自動偵測留白設定
+    if "auto_margins" in cfg:
+        am = cfg["auto_margins"]
+        if am.get("enabled", False):
+            offsets = {}
+            for key in ("left", "right", "top", "bottom"):
+                raw = am.get(key, 0)
+                offsets[key] = convert_margin_value(raw, f"auto_margins.{key}")
+            cfg["_auto_margins"] = {"offsets": offsets}
+
     return cfg
 
 

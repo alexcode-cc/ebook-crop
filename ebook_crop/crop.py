@@ -7,7 +7,7 @@ from pathlib import Path
 
 import fitz  # PyMuPDF
 
-from ebook_crop import config, rotation
+from ebook_crop import automargin, config, rotation
 
 
 def _apply_crop(
@@ -57,20 +57,19 @@ def crop_pdf(
     start_page: int = 2,
     end_page: int = 0,
     rotation_list: list[dict] | None = None,
+    auto_margins: dict | None = None,
 ) -> None:
     """
     裁切 PDF 留白區域，可選套用頁面旋轉。
 
-    處理流程：先開啟 PDF 取得總頁數，若 pages 含 "3-0" 則在記憶體中解析為
-    3 至最後一頁，再進行旋轉與裁切。不修改 config 檔案。
-
     Args:
         input_path: 輸入 PDF 路徑
         output_path: 輸出 PDF 路徑
-        margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
-        start_page: 開始裁切頁數（1-based），0或1=封面也裁切，2=封面不裁切
-        end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
-        rotation_list: [[rotation]] 設定，每筆含 page 或 pages（1-based）、angle
+        margins: 留白裁切量 dict（auto_margins 啟用時棄用）
+        start_page: 開始裁切頁數（1-based）
+        end_page: 結束裁切頁數，0=至最後，-1=不含最後一頁
+        rotation_list: [[rotation]] 設定
+        auto_margins: 自動偵測留白設定，含 offsets
     """
     src_doc = fitz.open(input_path)
     doc: fitz.Document | None = None
@@ -86,7 +85,12 @@ def crop_pdf(
             doc = src_doc
             src_doc = None
 
-        _apply_crop(doc, margins, start_page, end_page)
+        if auto_margins is not None:
+            offsets = auto_margins.get("offsets")
+            automargin.apply_auto_crop(doc, start_page, end_page, offsets)
+        else:
+            _apply_crop(doc, margins, start_page, end_page)
+
         doc.save(output_path, garbage=1, deflate=True)
     finally:
         if src_doc is not None:

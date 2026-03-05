@@ -19,6 +19,16 @@ bottom = 36
 # top = "0.5in"
 # bottom = "36pt"
 
+# 自動偵測留白（啟用後 [margins] 將棄用）
+# 透過分析頁面文字/繪圖/圖片邊界，自動計算裁切量
+# [auto_margins]
+# enabled = true
+# 微調偏移（正值=向內多裁、負值=向外少裁，支援單位）
+# left = 0
+# right = 0
+# top = 0
+# bottom = 0
+
 [pages]
 # 開始裁切頁數（1-based，預設 2 = 封面不裁切）
 # 0 或 1 = 從第 1 頁開始裁切（封面也裁切）
