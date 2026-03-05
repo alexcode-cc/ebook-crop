@@ -236,6 +236,9 @@ def crop_pdf(
     """
     裁切 PDF 留白區域，可選套用頁面旋轉。
 
+    處理流程：先開啟 PDF 取得總頁數，若 pages 含 "3-0" 則在記憶體中解析為
+    3 至最後一頁，再進行旋轉與裁切。不修改 config 檔案。
+
     Args:
         input_path: 輸入 PDF 路徑
         output_path: 輸出 PDF 路徑
@@ -245,18 +248,26 @@ def crop_pdf(
         rotation_list: [[rotation]] 設定，每筆含 page 或 pages（1-based）、angle
     """
     src_doc = fitz.open(input_path)
+    doc: fitz.Document | None = None
 
-    if rotation_list:
-        rotation_map = _parse_rotation_list(rotation_list, len(src_doc))
-        doc = build_pdf_with_rotation(src_doc, rotation_map)
-        if doc is not src_doc:
+    try:
+        if rotation_list:
+            total_pages = len(src_doc)
+            rotation_map = _parse_rotation_list(rotation_list, total_pages)
+            doc = build_pdf_with_rotation(src_doc, rotation_map)
             src_doc.close()
-    else:
-        doc = src_doc
+            src_doc = None
+        else:
+            doc = src_doc
+            src_doc = None
 
-    _apply_crop(doc, margins, start_page, end_page)
-    doc.save(output_path, garbage=4, deflate=True)
-    doc.close()
+        _apply_crop(doc, margins, start_page, end_page)
+        doc.save(output_path, garbage=1, deflate=True)
+    finally:
+        if src_doc is not None:
+            src_doc.close()
+        if doc is not None:
+            doc.close()
 
 
 def main() -> None:
@@ -344,6 +355,7 @@ def main() -> None:
             crop_pdf(input_path, output_path, margins, start_page, end_page, rotation_list)
             save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
+        sys.stdout.flush()
     else:
         # 單檔模式
         if args.input is None:
@@ -365,6 +377,7 @@ def main() -> None:
         crop_pdf(args.input, output_path, margins, start_page, end_page, rotation_list)
         save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":
