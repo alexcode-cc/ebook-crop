@@ -46,45 +46,110 @@ def load_config(config_path: Path) -> dict:
         return tomli.load(f)
 
 
-def crop_pdf(
-    input_path: Path,
-    output_path: Path,
-    margins: dict[str, float],
-    start_page: int = 2,
-    end_page: int = 0,
-) -> None:
+def _get_rotated_page_rect(src_page: fitz.Page, angle: float) -> fitz.Rect:
+    """取得旋轉後頁面的邊界矩形。90°、270° 時寬高對調。"""
+    rect = src_page.rect
+    angle_90 = round(angle % 360) if angle >= 0 else round((-angle) % 360)
+    if angle_90 in (90, 270):
+        return fitz.Rect(0, 0, rect.height, rect.width)
+    return rect
+
+
+def build_pdf_with_rotation(
+    src_doc: fitz.Document,
+    rotation_map: dict[int, float],
+) -> fitz.Document:
     """
-    裁切 PDF 留白區域。
+    依旋轉設定重建 PDF。非旋轉頁面用 insert_pdf 複製，旋轉頁面用 show_pdf_page 重建。
 
     Args:
-        input_path: 輸入 PDF 路徑
-        output_path: 輸出 PDF 路徑
-        margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
-        start_page: 開始裁切頁數（1-based），0或1=封面也裁切，2=封面不裁切
-        end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
+        src_doc: 來源 PDF
+        rotation_map: {page_index: angle}，0-based，已依頁碼排序
+
+    Returns:
+        新文件（需由呼叫者關閉）
     """
+    total_pages = len(src_doc)
+    if not rotation_map:
+        return src_doc
+
+    sorted_rotations = sorted(rotation_map.items())
+    # 過濾超出範圍的頁碼
+    valid_rotations = [(i, a) for i, a in sorted_rotations if 0 <= i < total_pages]
+    for i, _ in sorted_rotations:
+        if i < 0 or i >= total_pages:
+            print(f"警告：旋轉頁碼 {i + 1} 超出範圍（共 {total_pages} 頁），跳過", file=sys.stderr)
+
+    if not valid_rotations:
+        return src_doc
+
+    new_doc = fitz.open()
+    first_rot = valid_rotations[0][0]
+    last_rot = valid_rotations[-1][0]
+
+    # 第一個旋轉頁面之前
+    if first_rot > 0:
+        new_doc.insert_pdf(src_doc, from_page=0, to_page=first_rot - 1)
+
+    # 依序處理每個旋轉頁面及其之間的區段
+    for idx, (rot_page, angle) in enumerate(valid_rotations):
+        # 旋轉頁面：建立新頁面並 show_pdf_page
+        src_page = src_doc[rot_page]
+        rect = _get_rotated_page_rect(src_page, angle)
+        new_page = new_doc.new_page(width=rect.width, height=rect.height)
+        # 使用者：正值=順時針。PyMuPDF rotate 需實測，先取負值對應逆時針
+        new_page.show_pdf_page(
+            fitz.Rect(0, 0, rect.width, rect.height),
+            src_doc,
+            rot_page,
+            rotate=-angle,
+            keep_proportion=True,
+        )
+
+        # 此旋轉頁面與下一個旋轉頁面之間
+        if idx + 1 < len(valid_rotations):
+            next_rot = valid_rotations[idx + 1][0]
+            if next_rot > rot_page + 1:
+                new_doc.insert_pdf(
+                    src_doc,
+                    from_page=rot_page + 1,
+                    to_page=next_rot - 1,
+                )
+
+    # 最後一個旋轉頁面之後
+    if last_rot < total_pages - 1:
+        new_doc.insert_pdf(
+            src_doc,
+            from_page=last_rot + 1,
+            to_page=total_pages - 1,
+        )
+
+    return new_doc
+
+
+def _apply_crop(
+    doc: fitz.Document,
+    margins: dict[str, float],
+    start_page: int,
+    end_page: int,
+) -> None:
+    """對文件套用裁切設定。"""
     left = margins.get("left", 0)
     right = margins.get("right", 0)
     top = margins.get("top", 0)
     bottom = margins.get("bottom", 0)
 
-    doc = fitz.open(input_path)
     total_pages = len(doc)
-
-    # 1-based 轉 0-based：start_page=2 -> 從 index 1 開始裁切
     start_index = (start_page - 1) if start_page > 0 else 0
-    # end_page=0 -> 裁切到最後；end_page=-1 -> 裁切到倒數第二頁
     end_index = (total_pages - 2) if end_page == -1 else (total_pages - 1)
 
     for page_num in range(total_pages):
-        # 不在裁切範圍內的頁面跳過
         if page_num < start_index or page_num > end_index:
             continue
 
         page = doc[page_num]
         rect = page.rect
 
-        # 計算裁切後的顯示區域
         crop_rect = fitz.Rect(
             left,
             top,
@@ -92,7 +157,6 @@ def crop_pdf(
             rect.height - bottom,
         )
 
-        # 確保裁切區域有效
         if crop_rect.width <= 0 or crop_rect.height <= 0:
             print(
                 f"警告：第 {page_num + 1} 頁裁切區域無效，跳過裁切",
@@ -102,6 +166,43 @@ def crop_pdf(
 
         page.set_cropbox(crop_rect)
 
+
+def crop_pdf(
+    input_path: Path,
+    output_path: Path,
+    margins: dict[str, float],
+    start_page: int = 2,
+    end_page: int = 0,
+    rotation_list: list[dict] | None = None,
+) -> None:
+    """
+    裁切 PDF 留白區域，可選套用頁面旋轉。
+
+    Args:
+        input_path: 輸入 PDF 路徑
+        output_path: 輸出 PDF 路徑
+        margins: 留白裁切量 dict，包含 left, right, top, bottom（單位：點）
+        start_page: 開始裁切頁數（1-based），0或1=封面也裁切，2=封面不裁切
+        end_page: 結束裁切頁數，0=裁切到最後一頁，-1=最後一頁不裁切
+        rotation_list: [[rotation]] 設定，每筆含 page（1-based）、angle
+    """
+    src_doc = fitz.open(input_path)
+
+    if rotation_list:
+        rotation_map = {}
+        for r in rotation_list:
+            p = int(r.get("page", 0))
+            a = float(r.get("angle", 0))
+            if p > 0:
+                rotation_map[p - 1] = a  # 1-based -> 0-based
+        rotation_map = dict(sorted(rotation_map.items()))
+        doc = build_pdf_with_rotation(src_doc, rotation_map)
+        if doc is not src_doc:
+            src_doc.close()
+    else:
+        doc = src_doc
+
+    _apply_crop(doc, margins, start_page, end_page)
     doc.save(output_path, garbage=4, deflate=True)
     doc.close()
 
@@ -153,11 +254,15 @@ def main() -> None:
     pages_config = config.get("pages", {})
     start_page = int(pages_config.get("start", 2))
     end_page = int(pages_config.get("end", 0))
+    rotation_list = config.get("rotation", [])
 
     print(f"留白設定：左 {margins.get('left', 0)}pt, 右 {margins.get('right', 0)}pt, "
           f"上 {margins.get('top', 0)}pt, 下 {margins.get('bottom', 0)}pt")
     print(f"頁數範圍：從第 {start_page} 頁開始，"
           f"{'至最後一頁' if end_page == 0 else '最後一頁不裁切'}")
+    if rotation_list:
+        pages_str = ", ".join(str(r.get("page", "?")) for r in rotation_list)
+        print(f"旋轉頁面：第 {pages_str} 頁")
 
     if args.input is None and args.output is None:
         # 批次模式：處理 input/ 目錄內所有 PDF
@@ -179,7 +284,7 @@ def main() -> None:
         for input_path in pdf_files:
             output_path = output_dir / input_path.name
             _safe_print(f"裁切中：{input_path.name} -> {output_path}")
-            crop_pdf(input_path, output_path, margins, start_page, end_page)
+            crop_pdf(input_path, output_path, margins, start_page, end_page, rotation_list)
             save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
     else:
@@ -200,7 +305,7 @@ def main() -> None:
             output_path = output_path.with_suffix(".pdf")
 
         _safe_print(f"裁切中：{args.input} -> {output_path}")
-        crop_pdf(args.input, output_path, margins, start_page, end_page)
+        crop_pdf(args.input, output_path, margins, start_page, end_page, rotation_list)
         save_config_to_output(args.config.resolve(), output_path)
         print("完成！")
 
