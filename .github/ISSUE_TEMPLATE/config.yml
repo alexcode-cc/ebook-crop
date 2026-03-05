@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 技術文件
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs/TECHNICAL_ANALYSIS.md
+    about: 專案技術分析與架構說明
