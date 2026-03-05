@@ -213,8 +213,7 @@ ebook-crop/
 │   ├── test_crop.py   # Crop 單元測試
 │   ├── test_integration.py # 整合測試
 │   ├── test_edge_cases.py  # 邊界測試
-│   └── generate_samples.py # 樣本 PDF 生成腳本
-├── test/              # 測試資料
+│   ├── generate_samples.py # 樣本 PDF 生成腳本
 │   ├── input/         # 樣本 PDF 與測試設定檔
 │   └── output/        # 測試輸出（Git 排除）
 ├── input/             # 批次輸入（Git 排除）

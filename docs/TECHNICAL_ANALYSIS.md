@@ -224,9 +224,7 @@ tests/
 ├── test_crop.py         # Crop unit tests (11 tests)
 ├── test_integration.py  # Integration tests (12 tests)
 ├── test_edge_cases.py   # Edge case tests (17 tests)
-└── generate_samples.py  # Script to generate sample PDFs
-
-test/
+├── generate_samples.py  # Script to generate sample PDFs
 ├── input/               # Sample PDFs and test configs (committed to Git)
 │   ├── basic_5page.pdf
 │   ├── single_page.pdf
@@ -243,8 +241,8 @@ test/
 ### 6.2 Test Fixtures
 
 Shared fixtures in `conftest.py` provide:
-- Sample PDF file paths (`test/input/`)
-- Output directory setup and cleanup (`test/output/`)
+- Sample PDF file paths (`tests/input/`)
+- Output directory setup and cleanup (`tests/output/`)
 
 ### 6.3 Sample PDFs
 
@@ -343,7 +341,7 @@ Key remaining directions include:
 | `tests/test_integration.py` | Integration tests |
 | `tests/test_edge_cases.py` | Edge case tests |
 | `tests/generate_samples.py` | Sample PDF generator |
-| `test/input/` | Sample PDFs and test configs |
+| `tests/input/` | Sample PDFs and test configs |
 | `CONTRIBUTING.md` | Commit conventions |
 | `CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
 | `CLAUDE.md` | Claude Code guidance |
@@ -353,6 +351,6 @@ Key remaining directions include:
 
 ## 10. Version Info
 
-- Project version: 1.5.0
+- Project version: 1.5.1
 - Python: 3.10+
 - Document updated: 2026-03-05

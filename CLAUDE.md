@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ebook-crop (v1.5.0) is a Python CLI tool for cropping PDF ebook margins and applying arbitrary-angle page rotation. It uses PyMuPDF (`fitz`) for PDF manipulation, `tomli` for TOML config parsing, and `rich` for colored terminal output and progress bars.
+ebook-crop (v1.5.1) is a Python CLI tool for cropping PDF ebook margins and applying arbitrary-angle page rotation. It uses PyMuPDF (`fitz`) for PDF manipulation, `tomli` for TOML config parsing, and `rich` for colored terminal output and progress bars.
 
 ## Common Commands
 
@@ -23,7 +23,7 @@ uv run pytest --cov --cov-report=term-missing -v
 uv sync --locked --all-extras
 ```
 
-Tests use `pytest` with `pytest-cov`. Test fixtures and sample PDFs are in `test/input/`, test output goes to `test/output/` (gitignored). CI runs `ruff check`, `pytest --cov`, and `ebook-crop --help` on Python 3.10/3.11/3.12.
+Tests use `pytest` with `pytest-cov`. Test fixtures and sample PDFs are in `tests/input/`, test output goes to `tests/output/` (gitignored). CI runs `ruff check`, `pytest --cov`, and `ebook-crop --help` on Python 3.10/3.11/3.12.
 
 ## Architecture
 

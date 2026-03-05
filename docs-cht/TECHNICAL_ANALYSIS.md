@@ -211,7 +211,7 @@ tests/
 
 ### 5.3 樣本 PDF
 
-測試用樣本 PDF 與設定檔存放於 `test/input/`（加入 Git）：
+測試用樣本 PDF 與設定檔存放於 `tests/input/`（加入 Git）：
 
 | 檔案 | 說明 |
 |------|------|
@@ -354,13 +354,13 @@ ebook_crop/
 | `tests/test_integration.py` | 整合測試（12 個） |
 | `tests/test_edge_cases.py` | 邊界測試（17 個） |
 | `tests/generate_samples.py` | 樣本 PDF 生成腳本 |
-| `test/input/` | 樣本 PDF 與測試設定檔 |
+| `tests/input/` | 樣本 PDF 與測試設定檔 |
 | `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
 
 ---
 
 ## 10. 版本資訊
 
-- 專案版本：1.5.0
+- 專案版本：1.5.1
 - Python：3.10+
 - 文件更新：2026-03-05

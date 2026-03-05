@@ -215,8 +215,7 @@ ebook-crop/
 │   ├── test_crop.py   # Crop unit tests
 │   ├── test_integration.py # Integration tests
 │   ├── test_edge_cases.py # Edge case tests
-│   └── generate_samples.py # Sample PDF generator
-├── test/              # Test data
+│   ├── generate_samples.py # Sample PDF generator
 │   ├── input/         # Sample PDFs and test configs
 │   └── output/        # Test output (gitignored)
 ├── input/             # Batch input (gitignored)

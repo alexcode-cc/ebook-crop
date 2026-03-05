@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-03-05
+
+### 修正
+
+- **測試目錄**：將測試資料從 `test/input/` 搬移至 `tests/input/`，`test/output/` 搬移至 `tests/output/`，統一使用 pytest 慣例目錄結構
+
 ## [1.5.0] - 2026-03-05
 
 ### 新增
@@ -16,7 +22,7 @@
 - **邊界測試**：單頁、小頁面、橫向、大檔案（50 頁）、旋轉邊界條件（17 個測試）
 - **CI 測試流程**：pytest 加入 CI，於 Python 3.10/3.11/3.12 執行含覆蓋率
 - **程式碼覆蓋率**：pytest-cov 整合，CI 中顯示覆蓋率報告（config 97%、crop 98%、rotation 100%）
-- **test/input/ 樣本**：`basic_5page.pdf`、`single_page.pdf`、`ten_pages.pdf`、`landscape.pdf`、`small_page.pdf` 及測試設定檔
+- **tests/input/ 樣本**：`basic_5page.pdf`、`single_page.pdf`、`ten_pages.pdf`、`landscape.pdf`、`small_page.pdf` 及測試設定檔
 
 ### 變更
 
@@ -112,7 +118,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
