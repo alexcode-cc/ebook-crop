@@ -1,3 +1,3 @@
-"""PDF 電子書留白裁切工具，支援頁面旋轉任意角度"""
+"""PDF ebook margin cropping tool with arbitrary-angle page rotation"""
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
