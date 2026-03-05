@@ -18,10 +18,34 @@ PDF ebook margin cropping tool. Removes excessive top, bottom, left, and right m
 
 ## Installation
 
-### Option 1: uv run (recommended, no venv activation)
+### Prerequisites: Install uv
+
+This project recommends [uv](https://github.com/astral-sh/uv) — an extremely fast Python package and project manager. If you don't have uv installed yet:
 
 ```bash
-# From project directory, run directly (uv creates venv and installs deps automatically)
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or via pip
+pip install uv
+```
+
+> **uv** replaces `pip`, `pip-tools`, `virtualenv`, and more in a single tool. See the [uv documentation](https://github.com/astral-sh/uv) for details.
+
+After installing uv, clone this repository:
+
+```bash
+git clone git@github.com:alexcode-cc/ebook-crop.git
+cd ebook-crop
+```
+
+### Option 1: uv run (recommended, no venv activation needed)
+
+```bash
+# uv automatically creates a venv and installs dependencies on first run
 uv run ebook-crop
 ```
 
@@ -38,7 +62,7 @@ uv run ebook-crop input.pdf -o output.pdf
 uv run ebook-crop input.pdf -c config.toml -o output.pdf
 ```
 
-### Option 2: Install with uv
+### Option 2: Install with uv into a virtual environment
 
 ```bash
 # Create virtual environment
@@ -50,14 +74,14 @@ uv venv
 # Activate (Linux/macOS)
 source .venv/bin/activate
 
-# Install
+# Install project
 uv pip install -e .
 
 # Then use ebook-crop directly
 ebook-crop
 ```
 
-### Option 3: pip
+### Option 3: pip (without uv)
 
 ```bash
 pip install -e .
