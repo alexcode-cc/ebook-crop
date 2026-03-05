@@ -1,0 +1,51 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+ebook-crop (v1.3.0) is a Python CLI tool for cropping PDF ebook margins and applying arbitrary-angle page rotation. It uses PyMuPDF (`fitz`) for PDF manipulation and `tomli` for TOML config parsing.
+
+## Common Commands
+
+```bash
+# Run the tool (uv auto-creates venv)
+uv run ebook-crop                              # Batch mode: input/ -> output/
+uv run ebook-crop input.pdf -o output.pdf      # Single file
+
+# Lint
+uv run ruff check .
+
+# Install dependencies
+uv sync --locked --all-extras
+```
+
+There are no tests in this project. CI only runs `ruff check` and verifies `ebook-crop --help`.
+
+## Architecture
+
+Entry point: `ebook_crop/main.py` -> `cli.py:main()`.
+
+Processing pipeline:
+1. **cli.py** — Parses CLI args (`argparse`), loads config, dispatches batch or single-file mode
+2. **config.py** — Loads `config.toml` via `tomli`, parses `[[rotation]]` entries into a `{page_index: angle}` map (0-based)
+3. **crop.py** — Orchestrates: opens PDF, applies rotation (if any) then margin cropping via `set_cropbox()`
+4. **rotation.py** — Rebuilds PDF with rotated pages using `show_pdf_page()` (non-rotated pages copied via `insert_pdf`)
+5. **utils.py** — `_safe_print()` for Unicode-safe output, `save_config_to_output()` copies config alongside output PDF
+
+Key design details:
+- Rotation config uses 1-based page numbers; `parse_rotation_list()` converts to 0-based indices
+- `pages = "3-0"` means "page 3 to last page" (0 = last page sentinel)
+- Config file is copied next to output PDF for traceability (`{pdf_stem}.toml`)
+- `rotation.py` rebuilds the entire document page-by-page when any rotation is needed
+
+## Config Format
+
+Units are PDF points (72pt = 1 inch). See `config-sample.toml` for the template.
+
+## Conventions
+
+- Python 3.10+, managed with `uv` and `hatchling` build backend
+- Linting: `ruff` with rules E, F, I, N, W; line length 100
+- Commit messages: Angular convention, bilingual (English or Traditional Chinese)
+- Bilingual docs: English primary (`README.md`, `CONTRIBUTING.md`), Traditional Chinese variants (`*-CHT.md`)
