@@ -1,11 +1,17 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 技術文件
+  - name: Technical docs (English)
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs/TECHNICAL_ANALYSIS.md
-    about: 專案技術分析與架構說明
-  - name: 貢獻指南
+    about: Project technical analysis and architecture
+  - name: Contributing (English)
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/CONTRIBUTING.md
+    about: Commit conventions and contribution workflow
+  - name: 技術文件（繁體中文）
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/docs-cht/TECHNICAL_ANALYSIS.md
+    about: 專案技術分析與架構說明
+  - name: 貢獻指南（繁體中文）
+    url: https://github.com/alexcode-cc/ebook-crop/blob/main/CONTRIBUTING-CHT.md
     about: Commit 規範與貢獻流程
-  - name: 行為準則
+  - name: Code of Conduct
     url: https://github.com/alexcode-cc/ebook-crop/blob/main/CODE_OF_CONDUCT.md
-    about: 社群行為準則
+    about: Community code of conduct

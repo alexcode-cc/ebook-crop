@@ -1,20 +1,20 @@
-## 變更類型
+## Change Type / 變更類型
 
-- [ ] Bug 修復
-- [ ] 新功能
-- [ ] 文件更新
-- [ ] 其他
+- [ ] Bug fix / Bug 修復
+- [ ] New feature / 新功能
+- [ ] Documentation / 文件更新
+- [ ] Other / 其他
 
-## 變更說明
+## Description / 變更說明
 
-簡述此 PR 的變更內容。
+Brief description of this PR. / 簡述此 PR 的變更內容。
 
-## 相關 Issue
+## Related Issue / 相關 Issue
 
-關聯 #(issue 編號)
+Closes #(issue number) / 關聯 #(issue 編號)
 
-## 檢查清單
+## Checklist / 檢查清單
 
-- [ ] 程式碼遵循專案風格
-- [ ] 已更新相關文件
-- [ ] Commit 訊息符合 [CONTRIBUTING.md](CONTRIBUTING.md) 規範
+- [ ] Code follows project style / 程式碼遵循專案風格
+- [ ] Related docs updated / 已更新相關文件
+- [ ] Commit messages follow [CONTRIBUTING.md](../CONTRIBUTING.md) or [CONTRIBUTING-CHT.md](../CONTRIBUTING-CHT.md)
