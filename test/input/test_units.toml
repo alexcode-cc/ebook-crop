@@ -1,0 +1,9 @@
+[margins]
+left = "1cm"
+right = "10mm"
+top = "0.5in"
+bottom = "36pt"
+
+[pages]
+start = 1
+end = 0

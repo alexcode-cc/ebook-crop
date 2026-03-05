@@ -1,0 +1,17 @@
+[margins]
+left = 20
+right = 20
+top = 20
+bottom = 20
+
+[pages]
+start = 1
+end = 0
+
+[[rotation]]
+page = 3
+angle = 90
+
+[[rotation]]
+pages = "5,7"
+angle = -1

@@ -1,6 +1,9 @@
 # 輸入與輸出目錄
-input/
-output/
+/input/
+/output/
+
+# 測試輸出（測試輸入 test/input/ 需加入 Git）
+test/output/
 
 # 本機設定（使用 config-sample.toml 複製為 config.toml）
 config.toml
