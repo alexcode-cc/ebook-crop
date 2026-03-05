@@ -48,19 +48,41 @@ def load_config(config_path: Path) -> dict:
 
 def _parse_rotation_list(rotation_list: list[dict]) -> dict[int, float]:
     """
-    解析 [[rotation]] 設定，支援 page（單頁）與 pages（多頁，逗號分隔或陣列）。
+    解析 [[rotation]] 設定，支援：
+    - page：單頁
+    - pages：多頁，可為 "1,3,5" 或 "3-9" 範圍，搭配 skip 可跳頁（如 skip=1 表示每隔一頁）
     回傳 {page_index: angle}，0-based，已排序。
     """
     rotation_map: dict[int, float] = {}
     for r in rotation_list:
         a = float(r.get("angle", 0))
+        skip = int(r.get("skip", 0))
+        if skip < 0:
+            skip = 0
         pages: list[int] = []
 
         if "pages" in r:
             val = r["pages"]
-            if isinstance(val, str):
-                pages = [int(x.strip()) for x in val.split(",") if x.strip()]
-            elif isinstance(val, list):
+            if isinstance(val, int):
+                if val > 0:
+                    pages = [val]
+            elif isinstance(val, str):
+                val = val.strip()
+                if "-" in val and "," not in val:
+                    # 範圍格式：3-9
+                    parts = val.split("-", 1)
+                    if len(parts) == 2:
+                        start = int(parts[0].strip())
+                        end = int(parts[1].strip())
+                        if start <= end:
+                            range_pages = list(range(start, end + 1))
+                            # skip=1 表示每隔一頁 -> 取 0, 2, 4, 6...
+                            step = skip + 1
+                            pages = [range_pages[i] for i in range(0, len(range_pages), step)]
+                else:
+                    # 逗號分隔：1,3,5,7
+                    pages = [int(x.strip()) for x in val.split(",") if x.strip()]
+            elif isinstance(val, (list, tuple)):
                 pages = [int(x) for x in val]
 
         if "page" in r:
