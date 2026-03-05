@@ -22,6 +22,7 @@ ebook-crop 是一個 PDF 電子書版面優化工具，主要解決：
 | PDF 處理 | PyMuPDF (fitz) 1.24+ |
 | 設定檔 | TOML (tomli) |
 | 終端機輸出 | Rich 13.0+ |
+| 測試框架 | pytest 8.0+、pytest-cov 5.0+ |
 | 環境管理 | uv |
 | 建置 | hatchling |
 
@@ -189,9 +190,62 @@ flowchart TD
 
 ---
 
-## 5. 依賴關係
+## 5. 測試
 
-### 5.1 直接依賴
+### 5.1 測試結構
+
+```
+tests/
+├── conftest.py          # 共用 fixtures（tmp_path、樣本 PDF 路徑、設定檔生成）
+├── test_config.py       # Config 單元測試（53 個）
+├── test_rotation.py     # Rotation 單元測試（15 個）
+├── test_crop.py         # Crop 單元測試（11 個）
+├── test_integration.py  # 整合測試（12 個）
+├── test_edge_cases.py   # 邊界測試（17 個）
+└── generate_samples.py  # 樣本 PDF 生成腳本
+```
+
+### 5.2 測試 Fixtures
+
+- **conftest.py**：提供共用 fixtures，包含臨時目錄、樣本 PDF 路徑、測試設定檔生成等
+
+### 5.3 樣本 PDF
+
+測試用樣本 PDF 與設定檔存放於 `test/input/`（加入 Git）：
+
+| 檔案 | 說明 |
+|------|------|
+| `basic_5page.pdf` | 基本 5 頁 PDF |
+| `single_page.pdf` | 單頁 PDF |
+| `ten_pages.pdf` | 10 頁 PDF |
+| `landscape.pdf` | 橫向 PDF |
+| `small_page.pdf` | 小頁面 PDF |
+| `test_basic.toml` | 基本測試設定 |
+| `test_rotation.toml` | 旋轉測試設定 |
+| `test_units.toml` | 單位測試設定 |
+| `test_zero_margins.toml` | 零留白測試設定 |
+
+### 5.4 覆蓋率
+
+| 模組 | 覆蓋率 |
+|------|--------|
+| config.py | 97% |
+| crop.py | 98% |
+| rotation.py | 100% |
+
+### 5.5 執行測試
+
+```bash
+uv run pytest --cov -v
+```
+
+CI 於 Python 3.10/3.11/3.12 執行測試含覆蓋率報告。
+
+---
+
+## 6. 依賴關係
+
+### 6.1 直接依賴
 
 ```
 pymupdf>=1.24.0   # PDF 讀寫、旋轉、裁切
@@ -199,7 +253,14 @@ tomli>=2.0.0      # TOML 解析（Python 3.11+ 可用 stdlib tomllib）
 rich>=13.0.0      # 終端機彩色輸出、進度條
 ```
 
-### 5.2 PyMuPDF 關鍵 API
+### 6.2 開發依賴
+
+```
+pytest>=8.0.0     # 測試框架
+pytest-cov>=5.0.0 # 覆蓋率報告
+```
+
+### 6.3 PyMuPDF 關鍵 API
 
 | 用途 | API |
 |------|-----|
@@ -211,9 +272,9 @@ rich>=13.0.0      # 終端機彩色輸出、進度條
 
 ---
 
-## 6. 擴充與改進建議
+## 7. 擴充與改進建議
 
-### 6.1 模組化重構
+### 7.1 模組化重構
 
 已完成拆分，結構如下：
 
@@ -229,21 +290,23 @@ ebook_crop/
 └── utils.py       # _safe_print、save_config_to_output
 ```
 
-### 6.2 功能藍圖
+### 7.2 功能藍圖
 
 依開發階段劃分的詳細功能規劃，請見 [ROADMAP.md](ROADMAP.md)。
+
+**階段一（品質與測試基礎）已於 v1.5.0 完成**，包括 pytest 框架（108 個測試）、config/rotation/crop 單元測試、整合測試、邊界測試、CI 測試流程與程式碼覆蓋率。
 
 **階段二（使用者體驗改善）已於 v1.4.0 完成**，包括 `--version` 旗標、Rich 進度條、詳細/靜默模式、預覽模式、留白單位支援、設定檔驗證與彩色輸出。
 
 主要發展方向包括：
 
-- **測試基礎**：pytest 框架、單元/整合測試、CI 測試流程
+- ~~**測試基礎**~~：已完成（v1.5.0）
 - ~~**體驗改善**~~：已完成（v1.4.0）
 - **核心擴充**：自動偵測留白、每頁不同留白、奇偶頁留白、裁切預覽
 - **進階功能**：平行批次處理、遞迴目錄、設定檔配置系統
 - **生態系**：PyPI 發布工作流程、GUI 前端、Docker 映像
 
-### 6.3 效能考量
+### 7.3 效能考量
 
 - 大檔案（300+ 頁）旋轉多頁時，`show_pdf_page` 較耗時
 - `garbage=1` 已用於平衡速度與檔案大小
@@ -251,15 +314,15 @@ ebook_crop/
 
 ---
 
-## 7. 開發規範
+## 8. 開發規範
 
-### 7.1 Git Commit
+### 8.1 Git Commit
 
 - 規範：AngularJS Git Commit Message Conventions
 - 語言：英文或繁體中文
 - 詳見：`CONTRIBUTING.md`（English）、`CONTRIBUTING-CHT.md`（繁體中文）
 
-### 7.2 專案慣例
+### 8.2 專案慣例
 
 - 頁碼：對外（config、顯示）為 1-based，內部為 0-based
 - 角度：正值=順時針、負值=逆時針
@@ -267,7 +330,7 @@ ebook_crop/
 
 ---
 
-## 8. 檔案清單
+## 9. 檔案清單
 
 | 路徑 | 說明 |
 |------|------|
@@ -284,12 +347,20 @@ ebook_crop/
 | `CONTRIBUTING.md` | Commit 規範（English） |
 | `CONTRIBUTING-CHT.md` | Commit 規範（繁體中文） |
 | `CLAUDE.md` | Claude Code 輔助指引 |
+| `tests/conftest.py` | 測試共用 fixtures |
+| `tests/test_config.py` | Config 單元測試（53 個） |
+| `tests/test_rotation.py` | Rotation 單元測試（15 個） |
+| `tests/test_crop.py` | Crop 單元測試（11 個） |
+| `tests/test_integration.py` | 整合測試（12 個） |
+| `tests/test_edge_cases.py` | 邊界測試（17 個） |
+| `tests/generate_samples.py` | 樣本 PDF 生成腳本 |
+| `test/input/` | 樣本 PDF 與測試設定檔 |
 | `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
 
 ---
 
-## 9. 版本資訊
+## 10. 版本資訊
 
-- 專案版本：1.4.0
+- 專案版本：1.5.0
 - Python：3.10+
 - 文件更新：2026-03-05

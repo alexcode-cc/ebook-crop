@@ -4,6 +4,24 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-03-05
+
+### 新增
+
+- **pytest 框架**：完整測試套件，5 個測試模組共 108 個測試
+- **Config 單元測試**：測試 `parse_rotation_list`、`format_rotation_display`、`format_margins_display`、`load_config`、`convert_margin_value`、`validate_config`（53 個測試）
+- **Rotation 單元測試**：測試 `_get_rotated_page_rect`、寬高對調、`build_pdf_with_rotation`（15 個測試）
+- **Crop 單元測試**：測試 `_apply_crop` 邊界條件、`crop_pdf`（11 個測試）
+- **整合測試**：端對端流程 + CLI 整合測試（--version、--help、--dry-run、-v、-q）（12 個測試）
+- **邊界測試**：單頁、小頁面、橫向、大檔案（50 頁）、旋轉邊界條件（17 個測試）
+- **CI 測試流程**：pytest 加入 CI，於 Python 3.10/3.11/3.12 執行含覆蓋率
+- **程式碼覆蓋率**：pytest-cov 整合，CI 中顯示覆蓋率報告（config 97%、crop 98%、rotation 100%）
+- **test/input/ 樣本**：`basic_5page.pdf`、`single_page.pdf`、`ten_pages.pdf`、`landscape.pdf`、`small_page.pdf` 及測試設定檔
+
+### 變更
+
+- **CI 工作流程**：新增 pytest 含覆蓋率
+
 ## [1.4.0] - 2026-03-05
 
 ### 新增
@@ -94,7 +112,8 @@
 - config.toml 留白設定
 - 單檔與批次處理
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0

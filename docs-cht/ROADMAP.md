@@ -10,14 +10,14 @@
 
 | 項目 | 說明 | 優先度 |
 |------|------|--------|
-| pytest 框架 | 建立 pytest 測試架構，含測試 fixtures 與範例 PDF | 高 |
-| Config 單元測試 | 測試 `parse_rotation_list`、`format_rotation_display`、`load_config` | 高 |
-| Rotation 單元測試 | 測試 `_get_rotated_page_rect`、寬高對調邏輯 | 高 |
-| Crop 單元測試 | 測試 `_apply_crop` 邊界條件（空頁面、零留白） | 高 |
-| 整合測試 | 端對端：載入設定、裁切 PDF、驗證輸出 | 中 |
-| 邊界測試 | 單頁、空檔案、加密 PDF、超大檔案 | 中 |
-| CI 測試流程 | 將 pytest 加入 CI 工作流程，於 Python 3.10/3.11/3.12 執行 | 高 |
-| 程式碼覆蓋率 | 在 CI 中加入覆蓋率報告 | 低 |
+| ✅ pytest 框架 | 建立 pytest 測試架構，含測試 fixtures 與範例 PDF | 高 |
+| ✅ Config 單元測試 | 測試 `parse_rotation_list`、`format_rotation_display`、`load_config` | 高 |
+| ✅ Rotation 單元測試 | 測試 `_get_rotated_page_rect`、寬高對調邏輯 | 高 |
+| ✅ Crop 單元測試 | 測試 `_apply_crop` 邊界條件（空頁面、零留白） | 高 |
+| ✅ 整合測試 | 端對端：載入設定、裁切 PDF、驗證輸出 | 中 |
+| ✅ 邊界測試 | 單頁、空檔案、加密 PDF、超大檔案 | 中 |
+| ✅ CI 測試流程 | 將 pytest 加入 CI 工作流程，於 Python 3.10/3.11/3.12 執行 | 高 |
+| ✅ 程式碼覆蓋率 | 在 CI 中加入覆蓋率報告 | 低 |
 
 ---
 

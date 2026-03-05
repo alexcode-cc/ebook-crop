@@ -206,6 +206,17 @@ ebook-crop/
 │   ├── console.py     # 終端機輸出（彩色輸出、進度條）
 │   ├── crop.py        # 留白裁切
 │   └── utils.py       # 共用工具
+├── tests/             # 測試套件（pytest）
+│   ├── conftest.py    # 共用 fixtures
+│   ├── test_config.py # Config 單元測試
+│   ├── test_rotation.py # Rotation 單元測試
+│   ├── test_crop.py   # Crop 單元測試
+│   ├── test_integration.py # 整合測試
+│   ├── test_edge_cases.py  # 邊界測試
+│   └── generate_samples.py # 樣本 PDF 生成腳本
+├── test/              # 測試資料
+│   ├── input/         # 樣本 PDF 與測試設定檔
+│   └── output/        # 測試輸出（Git 排除）
 ├── input/             # 批次輸入（Git 排除）
 ├── output/            # 批次輸出（Git 排除）
 ├── HISTORY.md         # 變更紀錄（英文）
@@ -217,6 +228,12 @@ ebook-crop/
 ```
 
 ## 開發
+
+### 測試
+
+```bash
+uv run pytest --cov -v
+```
 
 ### 貢獻
 

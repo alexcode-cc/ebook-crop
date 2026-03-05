@@ -10,14 +10,14 @@ Establish automated testing to ensure stability before adding new features.
 
 | Item | Description | Priority |
 |------|-------------|----------|
-| pytest framework | Set up pytest with test fixtures and sample PDFs | High |
-| Config unit tests | Test `parse_rotation_list`, `format_rotation_display`, `load_config` | High |
-| Rotation unit tests | Test `_get_rotated_page_rect`, dimension swap logic | High |
-| Crop unit tests | Test `_apply_crop` boundary conditions (empty pages, zero margins) | High |
-| Integration tests | End-to-end: load config, crop PDF, verify output | Medium |
-| Edge case tests | Single page, empty file, encrypted PDF, very large files | Medium |
-| CI test pipeline | Add pytest to CI workflow, run on Python 3.10/3.11/3.12 | High |
-| Code coverage | Add coverage reporting to CI | Low |
+| ✅ pytest framework | Set up pytest with test fixtures and sample PDFs | High |
+| ✅ Config unit tests | Test `parse_rotation_list`, `format_rotation_display`, `load_config` | High |
+| ✅ Rotation unit tests | Test `_get_rotated_page_rect`, dimension swap logic | High |
+| ✅ Crop unit tests | Test `_apply_crop` boundary conditions (empty pages, zero margins) | High |
+| ✅ Integration tests | End-to-end: load config, crop PDF, verify output | Medium |
+| ✅ Edge case tests | Single page, empty file, encrypted PDF, very large files | Medium |
+| ✅ CI test pipeline | Add pytest to CI workflow, run on Python 3.10/3.11/3.12 | High |
+| ✅ Code coverage | Add coverage reporting to CI | Low |
 
 ---
 

@@ -22,6 +22,7 @@ ebook-crop is a PDF ebook layout optimization tool that addresses:
 | PDF Processing | PyMuPDF (fitz) 1.24+ |
 | Configuration | TOML (tomli) |
 | Terminal UI | Rich 13.0+ |
+| Testing | pytest 8.0+, pytest-cov 5.0+ |
 | Environment | uv |
 | Build | hatchling |
 
@@ -211,9 +212,64 @@ rich>=13.0.0      # Colored terminal output, progress bar
 
 ---
 
-## 6. Extension and Improvement Suggestions
+## 6. Testing
 
-### 6.1 Modular Refactoring
+### 6.1 Test Structure
+
+```
+tests/
+├── conftest.py          # Shared fixtures (sample PDF paths, output dir)
+├── test_config.py       # Config unit tests (53 tests)
+├── test_rotation.py     # Rotation unit tests (15 tests)
+├── test_crop.py         # Crop unit tests (11 tests)
+├── test_integration.py  # Integration tests (12 tests)
+├── test_edge_cases.py   # Edge case tests (17 tests)
+└── generate_samples.py  # Script to generate sample PDFs
+
+test/
+├── input/               # Sample PDFs and test configs (committed to Git)
+│   ├── basic_5page.pdf
+│   ├── single_page.pdf
+│   ├── ten_pages.pdf
+│   ├── landscape.pdf
+│   ├── small_page.pdf
+│   ├── test_basic.toml
+│   ├── test_rotation.toml
+│   ├── test_units.toml
+│   └── test_zero_margins.toml
+└── output/              # Test output directory (gitignored)
+```
+
+### 6.2 Test Fixtures
+
+Shared fixtures in `conftest.py` provide:
+- Sample PDF file paths (`test/input/`)
+- Output directory setup and cleanup (`test/output/`)
+
+### 6.3 Sample PDFs
+
+Generated via `tests/generate_samples.py`:
+- `basic_5page.pdf` — Standard 5-page PDF for general tests
+- `single_page.pdf` — Single page for boundary tests
+- `ten_pages.pdf` — 10-page PDF for range and batch tests
+- `landscape.pdf` — Landscape orientation for dimension tests
+- `small_page.pdf` — Small page dimensions for edge cases
+
+### 6.4 Coverage
+
+| Module | Coverage |
+|--------|----------|
+| config.py | 97% |
+| crop.py | 98% |
+| rotation.py | 100% |
+
+Tests run in CI on Python 3.10, 3.11, and 3.12 with coverage reporting via pytest-cov.
+
+---
+
+## 7. Extension and Improvement Suggestions
+
+### 7.1 Modular Refactoring
 
 Completed; structure:
 
@@ -229,20 +285,21 @@ ebook_crop/
 └── utils.py       # _safe_print, save_config_to_output
 ```
 
-### 6.2 Feature Roadmap
+### 7.2 Feature Roadmap
 
 For detailed feature plans organized by development phase, see [ROADMAP.md](ROADMAP.md).
+
+**Phase 1 (Quality & Testing Foundation) is completed** in v1.5.0, including pytest framework with 108 tests, config/rotation/crop unit tests, integration tests, edge case tests, CI test pipeline with coverage, and sample PDFs.
 
 **Phase 2 (UX Improvements) is completed** in v1.4.0, including `--version` flag, rich progress bar, verbose/quiet modes, dry-run preview, margin unit support, config validation, and colored terminal output.
 
 Key remaining directions include:
 
-- **Testing foundation**: pytest framework, unit/integration tests, CI test pipeline
 - **Core enhancements**: Auto-detect margins, per-page margins, odd/even page margins, crop preview
 - **Advanced features**: Parallel batch processing, recursive directory, profile system
 - **Ecosystem**: PyPI publishing workflow, GUI frontend, Docker image
 
-### 6.3 Performance Considerations
+### 7.3 Performance Considerations
 
 - Large files (300+ pages) with many rotated pages: `show_pdf_page` is slower
 - `garbage=1` already used for speed/size balance
@@ -250,14 +307,14 @@ Key remaining directions include:
 
 ---
 
-## 7. Development Conventions
+## 8. Development Conventions
 
-### 7.1 Git Commit
+### 8.1 Git Commit
 
 - Convention: AngularJS Git Commit Message Conventions
 - See: `CONTRIBUTING.md`, `.cursor/rules/commit-conventions.mdc`
 
-### 7.2 Project Conventions
+### 8.2 Project Conventions
 
 - Page numbers: External (config, display) 1-based, internal 0-based
 - Angles: Positive=clockwise, negative=counterclockwise
@@ -265,7 +322,7 @@ Key remaining directions include:
 
 ---
 
-## 8. File List
+## 9. File List
 
 | Path | Description |
 |------|-------------|
@@ -279,6 +336,14 @@ Key remaining directions include:
 | `ebook_crop/crop.py` | Margin crop |
 | `ebook_crop/console.py` | Terminal output (colored output, progress bar, verbosity) |
 | `ebook_crop/utils.py` | Shared utilities |
+| `tests/conftest.py` | Shared test fixtures |
+| `tests/test_config.py` | Config unit tests |
+| `tests/test_rotation.py` | Rotation unit tests |
+| `tests/test_crop.py` | Crop unit tests |
+| `tests/test_integration.py` | Integration tests |
+| `tests/test_edge_cases.py` | Edge case tests |
+| `tests/generate_samples.py` | Sample PDF generator |
+| `test/input/` | Sample PDFs and test configs |
 | `CONTRIBUTING.md` | Commit conventions |
 | `CONTRIBUTING-CHT.md` | Commit conventions (Traditional Chinese) |
 | `CLAUDE.md` | Claude Code guidance |
@@ -286,8 +351,8 @@ Key remaining directions include:
 
 ---
 
-## 9. Version Info
+## 10. Version Info
 
-- Project version: 1.4.0
+- Project version: 1.5.0
 - Python: 3.10+
 - Document updated: 2026-03-05

@@ -4,6 +4,24 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-03-05
+
+### Added
+
+- **pytest framework**: Full test suite with 108 tests across 5 test modules
+- **Config unit tests**: Tests for `parse_rotation_list`, `format_rotation_display`, `format_margins_display`, `load_config`, `convert_margin_value`, `validate_config` (53 tests)
+- **Rotation unit tests**: Tests for `_get_rotated_page_rect`, dimension swap, `build_pdf_with_rotation` (15 tests)
+- **Crop unit tests**: Tests for `_apply_crop` boundary conditions, `crop_pdf` (11 tests)
+- **Integration tests**: End-to-end workflows and CLI integration (`--version`, `--help`, `--dry-run`, `-v`, `-q`) (12 tests)
+- **Edge case tests**: Single page, small page, landscape, large files (50 pages), rotation edge cases (17 tests)
+- **CI test pipeline**: pytest added to CI on Python 3.10/3.11/3.12 with coverage
+- **Code coverage**: pytest-cov integrated, coverage reporting in CI (config 97%, crop 98%, rotation 100%)
+- **Sample PDFs and test configs**: `test/input/` with `basic_5page.pdf`, `single_page.pdf`, `ten_pages.pdf`, `landscape.pdf`, `small_page.pdf`, and test TOML configs
+
+### Changed
+
+- **CI workflow**: Now includes pytest with coverage on Python 3.10/3.11/3.12
+
 ## [1.4.0] - 2026-03-05
 
 ### Added
@@ -94,7 +112,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 - config.toml margin settings
 - Single-file and batch processing
 
-[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/alexcode-cc/ebook-crop/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/alexcode-cc/ebook-crop/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.3.0
 [1.2.0]: https://github.com/alexcode-cc/ebook-crop/releases/tag/v1.2.0

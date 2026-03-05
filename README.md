@@ -208,6 +208,17 @@ ebook-crop/
 │   ├── crop.py        # Margin crop
 │   ├── console.py     # Terminal output (colored output, progress bar, verbosity)
 │   └── utils.py       # Shared utilities
+├── tests/             # Test suite (pytest)
+│   ├── conftest.py    # Shared fixtures
+│   ├── test_config.py # Config unit tests
+│   ├── test_rotation.py # Rotation unit tests
+│   ├── test_crop.py   # Crop unit tests
+│   ├── test_integration.py # Integration tests
+│   ├── test_edge_cases.py # Edge case tests
+│   └── generate_samples.py # Sample PDF generator
+├── test/              # Test data
+│   ├── input/         # Sample PDFs and test configs
+│   └── output/        # Test output (gitignored)
 ├── input/             # Batch input (gitignored)
 ├── output/            # Batch output (gitignored)
 ├── HISTORY.md         # Changelog (English)
@@ -219,6 +230,12 @@ ebook-crop/
 ```
 
 ## Development
+
+### Run tests
+
+```bash
+uv run pytest --cov -v
+```
 
 ### Contributing
 
