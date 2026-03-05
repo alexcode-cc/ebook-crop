@@ -33,10 +33,15 @@ ebook-crop 是一個 PDF 電子書版面優化工具，主要解決：
 ```
 ebook_crop/
 ├── __init__.py    # 版本號
-└── main.py        # 單一入口，約 400 行
+├── main.py        # 進入點，轉發至 cli.main
+├── cli.py         # argparse、main()
+├── config.py      # load_config、parse_rotation_list、format_rotation_display
+├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
+├── crop.py        # _apply_crop、crop_pdf
+└── utils.py       # _safe_print、save_config_to_output
 ```
 
-目前為單一模組設計，所有邏輯集中在 `main.py`。
+模組已拆分，各職責分離。
 
 ### 2.2 資料流
 
@@ -49,7 +54,7 @@ flowchart TD
 
     subgraph Parse [解析]
         C[load_config]
-        D[_parse_rotation_list]
+        D[parse_rotation_list]
     end
 
     subgraph Process [處理]
@@ -100,10 +105,10 @@ flowchart TD
 
 #### 3.1.2 載入邏輯
 
-- `load_config()`：讀取 TOML，找不到時提示複製 config-sample.toml
+- `config.load_config()`：讀取 TOML，找不到時提示複製 config-sample.toml
 - 路徑：預設 `config.toml`，可透過 `-c` 指定
 
-#### 3.1.3 旋轉設定解析 (`_parse_rotation_list`)
+#### 3.1.3 旋轉設定解析 (`parse_rotation_list`)
 
 | 格式 | 範例 | 說明 |
 |------|------|------|
@@ -117,7 +122,7 @@ flowchart TD
 
 **重要**：`pages="3-0"` 需在開啟 PDF 後才能解析，因需 `total_pages`。
 
-### 3.2 旋轉引擎 (`build_pdf_with_rotation`)
+### 3.2 旋轉引擎 (`rotation.build_pdf_with_rotation`)
 
 #### 3.2.1 策略：分段處理
 
@@ -147,7 +152,7 @@ flowchart TD
 
 ### 3.4 資源管理
 
-- `crop_pdf` 使用 `try/finally` 確保文件關閉
+- `crop.crop_pdf` 使用 `try/finally` 確保文件關閉
 - 有旋轉時：關閉 `src_doc`，保留 `new_doc` 供裁切與儲存
 - `doc.save(..., garbage=1, deflate=True)`：garbage=1 平衡速度與檔案大小
 
@@ -172,8 +177,8 @@ flowchart TD
 
 ### 4.3 輸出行為
 
-- 每份 PDF 處理後，將使用的 config 複製為 `檔名.toml` 至輸出目錄
-- `_safe_print` 處理 Windows 主控台 Unicode 編碼問題
+- 每份 PDF 處理後，將使用的 config 複製為 `檔名.toml` 至輸出目錄（`utils.save_config_to_output`）
+- `utils._safe_print` 處理 Windows 主控台 Unicode 編碼問題
 - `sys.stdout.flush()` 確保「完成！」即時顯示
 
 ---
@@ -203,13 +208,14 @@ tomli>=2.0.0      # TOML 解析（Python 3.11+ 可用 stdlib tomllib）
 
 ### 6.1 模組化重構
 
-目前 `main.py` 約 400 行，建議拆分：
+已完成拆分，結構如下：
 
 ```
 ebook_crop/
 ├── __init__.py
-├── cli.py          # argparse、main()
-├── config.py      # load_config、_parse_rotation_list、_format_rotation_display
+├── main.py        # 進入點
+├── cli.py         # argparse、main()
+├── config.py      # load_config、parse_rotation_list、format_rotation_display
 ├── rotation.py    # build_pdf_with_rotation、_get_rotated_page_rect
 ├── crop.py        # _apply_crop、crop_pdf
 └── utils.py       # _safe_print、save_config_to_output
@@ -227,7 +233,7 @@ ebook_crop/
 
 ### 6.3 測試建議
 
-- 單元測試：`_parse_rotation_list`、`_format_rotation_display`、`_get_rotated_page_rect`
+- 單元測試：`parse_rotation_list`、`format_rotation_display`（config.py）、`_get_rotated_page_rect`（rotation.py）
 - 整合測試：小 PDF 的裁切、旋轉、組合流程
 - 邊界測試：空檔案、單頁、超大檔案
 
@@ -261,8 +267,13 @@ ebook_crop/
 |------|------|
 | `pyproject.toml` | 專案設定、依賴、entry point |
 | `config-sample.toml` | 設定範本 |
-| `ebook_crop/main.py` | 主程式 |
 | `ebook_crop/__init__.py` | 版本號 |
+| `ebook_crop/main.py` | 進入點 |
+| `ebook_crop/cli.py` | 命令列介面 |
+| `ebook_crop/config.py` | 設定載入與解析 |
+| `ebook_crop/rotation.py` | 頁面旋轉 |
+| `ebook_crop/crop.py` | 留白裁切 |
+| `ebook_crop/utils.py` | 共用工具 |
 | `CONTRIBUTING.md` | Commit 規範 |
 | `.gitignore` | 排除 input/、output/、config.toml、.venv 等 |
 
@@ -270,6 +281,6 @@ ebook_crop/
 
 ## 9. 版本資訊
 
-- 專案版本：0.1.0
+- 專案版本：1.1.0
 - Python：3.10+
 - 文件更新：2026-03-05

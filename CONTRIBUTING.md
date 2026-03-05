@@ -35,7 +35,7 @@
 
 ### Scope 範圍（可選）
 
-指定變更的模組或區域，例如：`pdf`、`config`、`cli`。
+指定變更的模組或區域，例如：`cli`、`config`、`crop`、`rotation`、`utils`。
 
 ### 範例
 

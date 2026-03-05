@@ -168,7 +168,14 @@ ebook-crop/
 ├── config-sample.toml # 設定檔範本
 ├── config.toml        # 本機設定（Git 排除）
 ├── docs/              # 技術文件
-├── ebook_crop/        # 主程式
+├── ebook_crop/        # 主程式模組
+│   ├── __init__.py    # 版本號
+│   ├── main.py        # 進入點
+│   ├── cli.py         # 命令列介面
+│   ├── config.py      # 設定載入與解析
+│   ├── rotation.py    # 頁面旋轉
+│   ├── crop.py        # 留白裁切
+│   └── utils.py       # 共用工具
 ├── input/             # 批次輸入（Git 排除）
 ├── output/            # 批次輸出（Git 排除）
 ├── HISTORY.md         # 變更紀錄
