@@ -1,5 +1,6 @@
 # ebook-crop
 
+[![CI](https://github.com/alexcode-cc/ebook-crop/actions/workflows/ci.yml/badge.svg)](https://github.com/alexcode-cc/ebook-crop/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -154,7 +155,7 @@ ebook-crop/
 
 ### 貢獻
 
-歡迎提交 Issue 與 Pull Request。請遵循 [CONTRIBUTING.md](CONTRIBUTING.md) 中的 Commit 規範。
+歡迎提交 Issue 與 Pull Request。請遵循 [CONTRIBUTING.md](CONTRIBUTING.md) 中的 Commit 規範，並遵守 [行為準則](CODE_OF_CONDUCT.md)。
 
 ### 技術文件
 
